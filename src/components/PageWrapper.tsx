@@ -5,9 +5,9 @@ type WrapperProps = {
 };
 const PageWrapper: React.FC<WrapperProps> = ({ children }) => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#02246d] to-[#1d2056] text-zinc-300">
+    <main className="flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#02246d] to-[#1d2056] text-zinc-300">
       <HeaderMenu />
-      {children}
+      <div className="pt-14">{children}</div>
     </main>
   );
 };

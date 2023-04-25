@@ -9,7 +9,7 @@ const readFileAsync = promisify(fs.readFile);
 
 async function getGoogleAuth() {
   const keyFileContent = await readFileAsync(
-    process.env.GOOGLE_API_KEY,
+    process.env.GOOGLE_API_KEY as string,
     "utf-8"
   );
   const key = JSON.parse(keyFileContent);
@@ -36,11 +36,35 @@ export const battleStatsRouter = createTRPCRouter({
       auth: auth,
     });
     const spreadsheetId = "1-2ZTQPOIbNiwwN6IwMMHc0GFWPFvKETKIAocetAcOZU";
-    const range = "NEO 7";
-    const response = await sheets.spreadsheets.get({
+    const statsSheet = await sheets.spreadsheets.get({
       spreadsheetId,
     });
-    console.log(response);
-    return response.data;
+    const range = "NEO 7";
+    // const details = await sheets.spreadsheets.values.get({
+    //   spreadsheetId,
+    //   range,
+    // });
+    console.log(statsSheet);
+    return { statSheet: statsSheet.data };
   }),
+  getSheetValues: publicProcedure
+    .input(z.object({ sheet: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const auth = await getGoogleAuth();
+      const sheets = google.sheets({
+        version: "v4",
+        auth: auth,
+      });
+      const spreadsheetId = "1-2ZTQPOIbNiwwN6IwMMHc0GFWPFvKETKIAocetAcOZU";
+      // const statsSheet = await sheets.spreadsheets.get({
+      //   spreadsheetId,
+      // });
+      const range = input.sheet;
+      const details = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range,
+      });
+      console.log(details);
+      return details.data;
+    }),
 });
