@@ -9,6 +9,12 @@ const HeaderMenu = () => {
       </Link>
       <Link
         className="rounded-md bg-zinc-300 p-2 text-2xl"
+        href={"https://www.shapesmag.com"}
+      >
+        Shop
+      </Link>
+      <Link
+        className="rounded-md bg-zinc-300 p-2 text-2xl"
         href={"/battlestats"}
       >
         BattleStats
