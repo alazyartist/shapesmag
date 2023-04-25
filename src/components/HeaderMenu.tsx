@@ -1,29 +1,31 @@
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
+import useIsAdmin from "~/hooks/useIsAdmin";
 
 const HeaderMenu = () => {
+  const user = useUser();
+  const isAdmin = useIsAdmin(user);
   return (
-    <div className="fixed top-4 flex place-items-center justify-around gap-4">
-      <Link className="rounded-md bg-zinc-300 p-2 text-2xl" href={"/"}>
-        Home
-      </Link>
-      <Link
-        className="rounded-md bg-zinc-300 p-2 text-2xl"
-        href={"https://www.shapesmag.com"}
-      >
-        Shop
-      </Link>
-      <Link
-        className="rounded-md bg-zinc-300 p-2 text-2xl"
-        href={"/battlestats"}
-      >
-        BattleStats
-      </Link>
-      <Link className="rounded-md bg-zinc-300 p-2 text-2xl" href={"/athletes"}>
-        Athletes
-      </Link>
+    <div className="maw-w-screen fixed top-4 flex flex-wrap place-items-center justify-around gap-2 text-zinc-900">
+      <MenuLink href={"/"}>Home</MenuLink>
+      <MenuLink href={"https://www.shapesmag.com"}>Shop</MenuLink>
+      <MenuLink href={"/battlestats"}>BattleStats</MenuLink>
+      <MenuLink href={"/athletes"}>Athletes</MenuLink>
+      {isAdmin && <MenuLink href={"/admin"}>Admin</MenuLink>}
     </div>
   );
 };
 
 export default HeaderMenu;
+
+const MenuLink = ({ href, children }) => {
+  return (
+    <Link
+      href={href}
+      className="p-2 text-lg font-light text-zinc-300 underline underline-offset-4"
+    >
+      {children}
+    </Link>
+  );
+};
