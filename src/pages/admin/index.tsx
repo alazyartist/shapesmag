@@ -24,17 +24,26 @@ const AdminIndex = () => {
           [details.values[0][1]]: details.values[i][1],
           [details.values[0][2]]: details.values[i][2],
           [details.values[0][3]]: details.values[i][3],
-          [details.values[0][4]]: details.values[i][4],
+          [details.values[0][4]]:
+            details.values[i]?.[4] === ""
+              ? details.values[i - 1]?.[4]
+              : details.values[i]?.[4],
           [details.values[0][5]]: details.values[i][5],
-          [details.values[0][6]]: details.values[i][6],
+          [details.values[0][6]]:
+            details.values[i]?.[6] === ""
+              ? details.values[i - 1]?.[6]
+              : details.values[i]?.[6],
         };
         console.log(obj, "obj");
         return obj;
       })
       .filter((s) => s !== undefined);
-    console.log("arr", arr);
+
+    return arr;
   };
-  prepData(details);
+
+  const preparedData = prepData(details);
+  const [googleDataVisible, setGoogleDataVisible] = useState(false);
   return (
     <div className="p-4">
       <div className="flex w-full">
@@ -52,6 +61,7 @@ const AdminIndex = () => {
           {!detailsVisible &&
             data?.statSheet?.sheets?.map((s, i) => (
               <div
+                className="border-[1px] border-zinc-200 p-1"
                 onClick={() => setActiveSheet(s?.properties?.title as string)}
               >
                 {s?.properties?.title}
@@ -59,8 +69,32 @@ const AdminIndex = () => {
             ))}
         </div>
         <div>
-          <h1 className="w-full text-center text-xl">{activeSheet}</h1>
-          <SheetValuesDisplay details={details} />
+          <h1
+            onClick={() => setGoogleDataVisible((pr) => !pr)}
+            className="w-full text-center text-xl"
+          >
+            {activeSheet}
+          </h1>
+          <SheetValuesDisplay
+            visible={googleDataVisible}
+            preparedData={preparedData}
+            details={details}
+          />
+          {/* <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
+            {preparedData?.map((d) => {
+              return (
+                <>
+                  <div>{d["Name"]}</div>
+                  <div>{d["Insta"]}</div>
+                  <div>{d["Votes"]}</div>
+                  <div>{d["% of votes"]}</div>
+                  <div>{d["Total Voters"]}</div>
+                  <div>{d["Sticker Taps"]}</div>
+                  <div>{d["Impressions"]}</div>
+                </>
+              );
+            })}
+          </div> */}
         </div>
       </div>
     </div>
@@ -69,7 +103,7 @@ const AdminIndex = () => {
 
 export default AdminIndex;
 
-const SheetValuesDisplay = ({ details }) => {
+const SheetValuesDisplay = ({ details, preparedData, visible }) => {
   return (
     <>
       <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
@@ -82,10 +116,27 @@ const SheetValuesDisplay = ({ details }) => {
           ?.slice(1, -1)
           ?.filter((s) => s.length > 0)
           .map((row, i) => (
-            <div className=" grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr]">
-              {row.map((col) => (
-                <div>{col}</div>
-              ))}
+            <div
+              key={`${i},${row[0]}`}
+              className=" grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr]"
+            >
+              {row.map((col, inde: number) => {
+                const keys = Object.keys(preparedData[i]);
+                const key = keys[inde] ?? 0;
+                const match = preparedData[i + 1]?.[key] === col;
+                return (
+                  <div
+                    className={`rounded-md border-[1px] border-zinc-200 p-1 ${
+                      match ? "border-emerald-300" : "border-red-300"
+                    }`}
+                  >
+                    {visible && <div className="text-zinc-400">{col}</div>}
+                    <div className="text-zinc-200">
+                      {preparedData[i + 1]?.[key]}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ))}
       </div>
