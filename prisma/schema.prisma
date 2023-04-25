@@ -13,11 +13,24 @@ datasource db {
 }
 
 model Users {
-    id String @id @default(uuid())
+    user_id String @id @default(uuid())
     clerk_id String?
     name String
-    insta String 
+    insta String
+    stats BattleStats[] 
 
+}
+
+model BattleStats {
+    id String @id @default(uuid())
+    user_id String
+    user Users @relation(fields: [user_id], references: [user_id])
+    votes Int
+    percent Float
+    totalVotes Int
+    stickerTaps Int
+    impressions Int
+    @@index([user_id])
 }
 
 model Example {
