@@ -8,10 +8,7 @@ const AdminIndex = () => {
   const { data: details } = api.battleStats.getSheetValues.useQuery({
     sheet: activeSheet,
   });
-  data?.statSheet?.sheets?.forEach((s) => {
-    console.log(s);
-    console.log(s?.properties?.title);
-  });
+
   const prepData = (details) => {
     console.log(details);
     if (details?.values === undefined) return;
@@ -47,19 +44,28 @@ const AdminIndex = () => {
   return (
     <div className="p-4">
       <div className="flex w-full">
-        <div className="rounded-md bg-zinc-500 p-2">Add Event</div>
         <button
           type="button"
           onClick={() => setDetailsVisible((prev) => !prev)}
           className="rounded-md bg-zinc-500 p-2"
         >
-          Show Details
+          {detailsVisible ? "Hide" : "See"} SheetData
         </button>
+        {!detailsVisible && (
+          <>
+            <button type="button" className="rounded-md bg-zinc-500 p-2">
+              Add User
+            </button>
+            <button type="button" className="rounded-md bg-zinc-500 p-2">
+              Add Event
+            </button>
+          </>
+        )}
       </div>
-      <div className="grid w-screen grid-cols-[1fr,4fr] ">
-        <div>
-          {!detailsVisible &&
-            data?.statSheet?.sheets?.map((s, i) => (
+      {detailsVisible && (
+        <div className="grid w-screen grid-cols-[1fr,4fr] ">
+          <div>
+            {data?.statSheet?.sheets?.map((s, i) => (
               <div
                 className="border-[1px] border-zinc-200 p-1"
                 onClick={() => setActiveSheet(s?.properties?.title as string)}
@@ -67,20 +73,20 @@ const AdminIndex = () => {
                 {s?.properties?.title}
               </div>
             ))}
-        </div>
-        <div>
-          <h1
-            onClick={() => setGoogleDataVisible((pr) => !pr)}
-            className="w-full text-center text-xl"
-          >
-            {activeSheet}
-          </h1>
-          <SheetValuesDisplay
-            visible={googleDataVisible}
-            preparedData={preparedData}
-            details={details}
-          />
-          {/* <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
+          </div>
+          <div>
+            <h1
+              onClick={() => setGoogleDataVisible((pr) => !pr)}
+              className="w-full text-center text-xl"
+            >
+              {activeSheet}
+            </h1>
+            <SheetValuesDisplay
+              visible={googleDataVisible}
+              preparedData={preparedData}
+              details={details}
+            />
+            {/* <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
             {preparedData?.map((d) => {
               return (
                 <>
@@ -95,8 +101,9 @@ const AdminIndex = () => {
               );
             })}
           </div> */}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -120,23 +127,32 @@ const SheetValuesDisplay = ({ details, preparedData, visible }) => {
               key={`${i},${row[0]}`}
               className=" grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr]"
             >
-              {row.map((col, inde: number) => {
-                const keys = Object.keys(preparedData[i]);
-                const key = keys[inde] ?? 0;
-                const match = preparedData[i + 1]?.[key] === col;
-                return (
-                  <div
-                    className={`rounded-md border-[1px] border-zinc-200 p-1 ${
-                      match ? "border-emerald-300" : "border-red-300"
-                    }`}
-                  >
-                    {visible && <div className="text-zinc-400">{col}</div>}
-                    <div className="text-zinc-200">
-                      {preparedData[i + 1]?.[key]}
-                    </div>
+              <>
+                {i % 2 === 0 && (
+                  <div className="col-span-8 p-1 text-center text-xl">
+                    {preparedData[i + 1]?.["Name"]}
+                    {" vs "}
+                    {preparedData[i + 2]?.["Name"]}
                   </div>
-                );
-              })}
+                )}
+                {row.map((col, inde: number) => {
+                  const keys = Object.keys(preparedData[i]);
+                  const key = keys[inde] ?? 0;
+                  const match = preparedData[i + 1]?.[key] === col;
+                  return (
+                    <div
+                      className={`rounded-md border-[1px] border-zinc-200 p-1 ${
+                        match ? "border-emerald-300" : "border-red-300"
+                      }`}
+                    >
+                      {visible && <div className="text-zinc-400">{col}</div>}
+                      <div className="text-zinc-200">
+                        {preparedData[i + 1]?.[key]}
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
             </div>
           ))}
       </div>
