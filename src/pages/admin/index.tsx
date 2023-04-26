@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AddAthleteModal from "~/components/AddAthleteModal";
 import { api } from "~/utils/api";
 
 const AdminIndex = () => {
@@ -40,6 +41,7 @@ const AdminIndex = () => {
   };
 
   const preparedData = prepData(details);
+  const [athleteModal, setAthleteModal] = useState(true);
   const [googleDataVisible, setGoogleDataVisible] = useState(false);
   return (
     <div className="p-4">
@@ -53,7 +55,11 @@ const AdminIndex = () => {
         </button>
         {!detailsVisible && (
           <>
-            <button type="button" className="rounded-md bg-zinc-500 p-2">
+            <button
+              onClick={() => setAthleteModal((prev) => !prev)}
+              type="button"
+              className="rounded-md bg-zinc-500 p-2"
+            >
               Add User
             </button>
             <button type="button" className="rounded-md bg-zinc-500 p-2">
@@ -62,6 +68,7 @@ const AdminIndex = () => {
           </>
         )}
       </div>
+      {athleteModal && <AddAthleteModal />}
       {detailsVisible && (
         <div className="grid w-screen grid-cols-[1fr,4fr] ">
           <div>
