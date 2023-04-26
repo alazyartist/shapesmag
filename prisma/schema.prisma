@@ -12,30 +12,82 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Users {
-    user_id String @id @default(uuid())
+model Athletes {
+    athlete_id Int @id @default(autoincrement())
     clerk_id String?
     name String
     insta String
-    stats BattleStats[] 
+   
+    events Athlete_Events[]
+    stats BattleStats[]
+    battles Athlete_Battles[]
+    
+    @@index([athlete_id])
+}
+model Athlete_Events {
+    id String @id @default(uuid())
+    athlete_id Int
+    event_id String
 
+    Athlete Athletes @relation(fields: [athlete_id],references: [athlete_id])
+    Event Events @relation(fields: [event_id],references: [event_id])
+    
+    @@index([athlete_id])
+    @@index([event_id])
+    @@unique([athlete_id,event_id])
 }
 
-model BattleStats {
+model Athlete_Battles {
     id String @id @default(uuid())
-    user_id String
-    user Users @relation(fields: [user_id], references: [user_id])
+    athlete_id Int
+    battle_id String @db.VarChar(36)
+
+    athlete Athletes @relation(fields: [athlete_id],references: [athlete_id])
+    battle Battles @relation(fields: [battle_id],references: [battle_id])
+    @@index([athlete_id])
+    @@index([battle_id])
+}
+
+model Battles {
+    battle_id String @db.VarChar(36) @id @default(uuid())
+    event_id String @db.VarChar(36)
+    versus String @db.VarChar(255)
+    
+    Athletes Athlete_Battles[]
+    stats BattleStats[]
+    event Events @relation(fields: [event_id],references: [event_id])
+
+    @@index([event_id])
+}
+model BattleStats {
+    id String @db.VarChar(36) @id @default(uuid())
+    battle_id String @db.VarChar(36)
+    athlete_id Int
     votes Int
     percent Float
     totalVotes Int
     stickerTaps Int
     impressions Int
-    @@index([user_id])
+    
+    battle Battles @relation(fields: [battle_id],references: [battle_id])
+    athlete Athletes @relation(fields: [athlete_id], references: [athlete_id])
+    
+    @@index([athlete_id])
+    @@index([battle_id])
 }
 
-model Example {
-    id        String   @id @default(cuid())
+model Events {
+    event_id String @db.VarChar(36)   @id @default(uuid())
+    date DateTime 
+    location String @db.VarChar(255)
+    host String @db.VarChar(255)
+    contactinfo String @db.VarChar(255)
+    ticketlink String @db.VarChar(255)
+    details String @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     totalVotes Int  @default(0)
+  
+    Athletes Athlete_Events[]
+    Battles Battles[]
 }
