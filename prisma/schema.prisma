@@ -82,11 +82,10 @@ model Events {
     location String @db.VarChar(255)
     host String @db.VarChar(255)
     contactinfo String @db.VarChar(255)
-    ticketlink String @db.VarChar(255)
-    details String @db.Text
+    ticketlink String? @db.VarChar(255)
+    details String? @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    totalVotes Int  @default(0)
   
     Athletes Athlete_Events[]
     Battles Battles[]
