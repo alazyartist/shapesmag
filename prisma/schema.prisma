@@ -78,7 +78,8 @@ model BattleStats {
 
 model Events {
     event_id String @db.VarChar(36)   @id @default(uuid())
-    date DateTime 
+    date DateTime @db.Date
+    name String
     location String @db.VarChar(255)
     host String @db.VarChar(255)
     contactinfo String @db.VarChar(255)

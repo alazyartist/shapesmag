@@ -46,7 +46,7 @@ const AdminIndex = () => {
   const [eventModal, setEventModal] = useState<boolean>(false);
   const [googleDataVisible, setGoogleDataVisible] = useState<boolean>(false);
   return (
-    <div className="h-[80vh] w-[95vw] max-w-[1200px] p-4">
+    <div className="h-[90vh] w-[95vw] max-w-[1200px] p-4">
       <div className="flex w-full">
         <button
           type="button"
@@ -74,7 +74,7 @@ const AdminIndex = () => {
           </>
         )}
       </div>
-      {athleteModal && <AddAthleteModal />}
+      {athleteModal && <AddAthleteModal setAthleteModal={setAthleteModal} />}
       {eventModal && <AddEventModal />}
       {detailsVisible && (
         <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] ">

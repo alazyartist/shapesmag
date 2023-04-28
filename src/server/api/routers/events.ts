@@ -5,7 +5,8 @@ export const eventsRouter = createTRPCRouter({
     .input(
       z.object({
         contactinfo: z.string(),
-        date: z.date(),
+        date: z.string(),
+        name: z.string(),
         details: z.string(),
         host: z.string(),
         location: z.string(),
@@ -13,13 +14,15 @@ export const eventsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { contactinfo, date, details, host, location, ticketlink } = input;
+      const { name, contactinfo, date, details, host, location, ticketlink } =
+        input;
       const event = await ctx.prisma.events.create({
         data: {
           contactinfo,
-          date,
+          date: new Date(date),
           details,
           host,
+          name,
           location,
           ticketlink,
         },
@@ -27,7 +30,7 @@ export const eventsRouter = createTRPCRouter({
       return event;
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const athletes = ctx.prisma.athletes.findMany({});
+    const athletes = ctx.prisma.events.findMany({});
     return athletes;
   }),
 });
