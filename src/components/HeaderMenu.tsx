@@ -1,12 +1,9 @@
-import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import useIsAdmin from "~/hooks/useIsAdmin";
 
 const HeaderMenu = () => {
-  const user = useUser();
-  type ClerkUser = typeof user;
-  const isAdmin: boolean = useIsAdmin(user as ClerkUser);
+  const isAdmin: boolean = useIsAdmin();
   return (
     <div className="maw-w-screen fixed top-4 flex flex-wrap place-items-center justify-around gap-2 text-zinc-900">
       <MenuLink href={"/"}>Home</MenuLink>

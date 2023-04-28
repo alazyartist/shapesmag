@@ -130,7 +130,7 @@ const SheetValuesDisplay = ({ details, preparedData, visible }) => {
     <>
       <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
         {details?.values?.[0]?.map((col) => (
-          <div>{col}</div>
+          <div key={col}>{col}</div>
         ))}
       </div>
       <div className=" gap-4">

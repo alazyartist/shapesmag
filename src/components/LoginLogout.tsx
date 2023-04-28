@@ -9,12 +9,11 @@ import {
 import useIsAdmin from "~/hooks/useIsAdmin";
 const LoginLogout = () => {
   const isAdmin = useIsAdmin();
-  // console.log(user.user?.publicMetadata?.isAdmin);
   return (
     <div className="flex gap-4">
       {isAdmin && (
         <div className="absolute bottom-3 left-[30vw] w-[40vw] text-center text-xl text-zinc-300">
-          You're an Admin
+          You&apos;re an Admin
         </div>
       )}
       <SignedOut>
