@@ -2,8 +2,8 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 
 const AddAthleteModal = () => {
-  const { mutate: createAthlete } = api.Athletes.createAthlete.useMutation();
-  const { data: athletes } = api.Athletes.getAll.useQuery();
+  const { mutate: createAthlete } = api.athletes.createAthlete.useMutation();
+  const { data: athletes } = api.athletes.getAll.useQuery();
   const startid = (athletes?.length as number) + 1 ?? 0;
   const [athleteId, setAthleteId] = useState<number>(startid);
   const [clerkId, setClerkId] = useState("");

@@ -26,4 +26,13 @@ export const athletesRouter = createTRPCRouter({
     const athletes = ctx.prisma.athletes.findMany({});
     return athletes;
   }),
+  getAthleteDetails: publicProcedure
+    .input(z.object({ athlete_id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const athlete = ctx.prisma.athletes.findUnique({
+        where: { athlete_id: input.athlete_id },
+        include: { battles: true, events: true, stats: true },
+      });
+      return athlete;
+    }),
 });

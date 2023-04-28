@@ -1,16 +1,32 @@
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import useIsAdmin from "~/hooks/useIsAdmin";
 
 const HeaderMenu = () => {
+  const router = useRouter();
   const isAdmin: boolean = useIsAdmin();
   return (
-    <div className="maw-w-screen fixed top-4 flex flex-wrap place-items-center justify-around gap-2 text-zinc-900">
-      <MenuLink href={"/"}>Home</MenuLink>
-      <MenuLink href={"https://www.shapesmag.com"}>Shop</MenuLink>
-      <MenuLink href={"/battlestats"}>BattleStats</MenuLink>
-      <MenuLink href={"/athletes"}>Athletes</MenuLink>
-      {isAdmin && <MenuLink href={"/admin"}>Admin</MenuLink>}
+    <div className="maw-w-screen fixed top-2 flex h-fit flex-col place-items-center  text-zinc-900">
+      {router.asPath !== "/" && (
+        <Image
+          src={"/shapeslogo.PNG"}
+          alt={"shapeslogo"}
+          width={100}
+          height={35}
+        />
+      )}
+      <div
+        className="
+      flex flex-wrap"
+      >
+        <MenuLink href={"/"}>Home</MenuLink>
+        <MenuLink href={"https://www.shapesmag.com"}>Shop</MenuLink>
+        <MenuLink href={"/battlestats"}>BattleStats</MenuLink>
+        <MenuLink href={"/athletes"}>Athletes</MenuLink>
+        {isAdmin && <MenuLink href={"/admin"}>Admin</MenuLink>}
+      </div>
     </div>
   );
 };

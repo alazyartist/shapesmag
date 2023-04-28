@@ -46,7 +46,7 @@ const AdminIndex = () => {
   const [eventModal, setEventModal] = useState<boolean>(false);
   const [googleDataVisible, setGoogleDataVisible] = useState<boolean>(false);
   return (
-    <div className="p-4">
+    <div className="h-[80vh] w-[95vw] max-w-[1200px] p-4">
       <div className="flex w-full">
         <button
           type="button"
@@ -77,22 +77,24 @@ const AdminIndex = () => {
       {athleteModal && <AddAthleteModal />}
       {eventModal && <AddEventModal />}
       {detailsVisible && (
-        <div className="grid w-screen grid-cols-[1fr,4fr] ">
+        <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] ">
           <div>
             {data?.statSheet?.sheets?.map((s, i) => (
               <div
                 key={`${i}:row`}
-                className="border-[1px] border-zinc-200 p-1"
+                className={`border-[1px] border-zinc-300 ${
+                  activeSheet === s.properties.title ? "bg-zinc-800" : ""
+                } p-1`}
                 onClick={() => setActiveSheet(s?.properties?.title)}
               >
                 {s?.properties?.title}
               </div>
             ))}
           </div>
-          <div>
+          <div className="no-scrollbar relative overflow-hidden overflow-y-scroll">
             <h1
               onClick={() => setGoogleDataVisible((pr) => !pr)}
-              className="w-full text-center text-xl"
+              className="sticky top-[-14px] w-full text-center text-3xl font-bold"
             >
               {activeSheet}
             </h1>
@@ -128,50 +130,74 @@ export default AdminIndex;
 const SheetValuesDisplay = ({ details, preparedData, visible }) => {
   return (
     <>
-      <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
+      <div className=" grid grid-cols-[1fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
         {details?.values?.[0]?.map((col) => (
           <div key={col}>{col}</div>
         ))}
       </div>
-      <div className=" gap-4">
+      <div className="h-full gap-4   ">
         {details?.values
           ?.slice(1, -1)
           ?.filter((s) => s.length > 0)
           .map((row: string[], i: number) => (
-            <div
-              key={`${i},${row?.[0]}`}
-              className=" grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr]"
-            >
-              <>
-                {i % 2 === 0 && (
-                  <div className="col-span-8 p-1 text-center text-xl">
-                    {preparedData?.[i + 1]?.["Name"]}
-                    {" vs "}
-                    {preparedData?.[i + 2]?.["Name"]}
-                  </div>
-                )}
-                {row.map((col: string, inde: number) => {
-                  const keys = Object.keys(preparedData?.[i]);
-                  const key = keys[inde] ?? 0;
-                  const match = preparedData?.[i + 1]?.[key] === col;
-                  return (
-                    <div
-                      key={`${col},${i}`}
-                      className={`rounded-md border-[1px] border-zinc-200 p-1 ${
-                        match ? "border-emerald-300" : "border-red-300"
-                      }`}
-                    >
-                      {visible && <div className="text-zinc-400">{col}</div>}
-                      <div className="text-zinc-200">
-                        {preparedData[i + 1]?.[key]}
-                      </div>
+            <>
+              <div
+                key={`${i},${row?.[0]}`}
+                className=" grid grid-cols-[.2fr,1fr,2fr,.5fr,.5fr,.5fr,.5fr,.5fr] "
+              >
+                <>
+                  {/* guess at battle */}
+                  {i % 2 === 0 && (
+                    <div className="col-span-8 p-1 text-center text-xl">
+                      {preparedData?.[i + 1]?.["Name"]}
+                      {" vs "}
+                      {preparedData?.[i + 2]?.["Name"]}
                     </div>
-                  );
-                })}
-              </>
-            </div>
+                  )}
+                  <input
+                    type="checkbox"
+                    onChange={(e) => console.log(e.target.checked)}
+                  />
+                  <RowDisplay
+                    visible={visible}
+                    preparedData={preparedData}
+                    row={row}
+                    i={i}
+                  />
+                </>
+              </div>
+              {i % 2 !== 0 && (
+                <div
+                  onClick={() =>
+                    console.log(preparedData[i], preparedData[i + 1])
+                  }
+                  className="rounded-md bg-emerald-300 p-1 text-center text-emerald-800"
+                >
+                  add battle info
+                </div>
+              )}
+            </>
           ))}
       </div>
     </>
   );
+};
+
+const RowDisplay = ({ row, visible, preparedData, i }) => {
+  return row.map((col: string, inde: number) => {
+    const keys = Object.keys(preparedData?.[i]);
+    const key = keys[inde] ?? 0;
+    const match = preparedData?.[i + 1]?.[key] === col;
+    return (
+      <div
+        key={`${col},${i}`}
+        className={`rounded-md border-[1px]  p-1 ${
+          match ? "border-emerald-300" : "border-red-300"
+        }`}
+      >
+        {visible && <div className="text-zinc-400">{col}</div>}
+        <div className="text-zinc-200">{preparedData[i + 1]?.[key]}</div>
+      </div>
+    );
+  });
 };

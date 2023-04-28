@@ -9,7 +9,7 @@ import { athletesRouter } from "./routers/athletes";
  */
 export const appRouter = createTRPCRouter({
   battleStats: battleStatsRouter,
-  Athletes: athletesRouter,
+  athletes: athletesRouter,
 });
 
 // export type definition of API
