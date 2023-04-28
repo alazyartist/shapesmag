@@ -7,11 +7,24 @@ import { promisify } from "util";
 const readFileAsync = promisify(fs.readFile);
 
 async function getGoogleAuth() {
-  const keyFileContent = await readFileAsync(
-    process.env.GOOGLE_API_KEY,
-    "utf-8"
-  );
-  const key = JSON.parse(keyFileContent) as { [key: string]: string };
+  // const keyFileContent = await readFileAsync(
+  //   process.env.GOOGLE_API_KEY,
+  //   "utf-8"
+  // );
+  // const key = JSON.parse(keyFileContent) as { [key: string]: string };
+  const key = {
+    type: process.env.GOOGLE_CRED_TYPE,
+    project_id: process.env.GOOGLE_CRED_PROJECT_ID,
+    private_key_id: process.env.GOOGLE_CRED_PRIVATE_KEY_ID,
+    private_key: process.env.GOOGLE_CRED_PRIVATE_KEY,
+    client_email: process.env.GOOGLE_CRED_CLIENT_EMAIL,
+    client_id: process.env.GOOGLE_CRED_CLIENT_ID,
+    auth_uri: process.env.GOOGLE_CRED_AUTH_URI,
+    token_uri: process.env.GOOGLE_CRED_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.GOOGLE_CRED_X509_CERT_URL,
+    client_x509_cert_url: process.env.GOOGLE_CRED_X509_CERT_URL,
+  };
+
   const auth = new google.auth.GoogleAuth({
     credentials: key,
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
