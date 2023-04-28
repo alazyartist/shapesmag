@@ -5,7 +5,8 @@ import useIsAdmin from "~/hooks/useIsAdmin";
 
 const HeaderMenu = () => {
   const user = useUser();
-  const isAdmin = useIsAdmin(user);
+  type ClerkUser = typeof user;
+  const isAdmin: boolean = useIsAdmin(user as ClerkUser);
   return (
     <div className="maw-w-screen fixed top-4 flex flex-wrap place-items-center justify-around gap-2 text-zinc-900">
       <MenuLink href={"/"}>Home</MenuLink>

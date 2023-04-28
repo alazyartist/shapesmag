@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { google } from "googleapis";
-
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import fs from "fs";
 import { promisify } from "util";
@@ -9,10 +8,10 @@ const readFileAsync = promisify(fs.readFile);
 
 async function getGoogleAuth() {
   const keyFileContent = await readFileAsync(
-    process.env.GOOGLE_API_KEY as string,
+    process.env.GOOGLE_API_KEY,
     "utf-8"
   );
-  const key = JSON.parse(keyFileContent);
+  const key = JSON.parse(keyFileContent) as { [key: string]: string };
   const auth = new google.auth.GoogleAuth({
     credentials: key,
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
@@ -29,7 +28,7 @@ export const battleStatsRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-  getSheets: publicProcedure.query(async ({ ctx }) => {
+  getSheets: publicProcedure.query(async () => {
     const auth = await getGoogleAuth();
     const sheets = google.sheets({
       version: "v4",
@@ -39,7 +38,6 @@ export const battleStatsRouter = createTRPCRouter({
     const statsSheet = await sheets.spreadsheets.get({
       spreadsheetId,
     });
-    const range = "NEO 7";
     // const details = await sheets.spreadsheets.values.get({
     //   spreadsheetId,
     //   range,

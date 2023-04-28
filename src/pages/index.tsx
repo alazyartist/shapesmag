@@ -4,8 +4,6 @@ import Link from "next/link";
 import LoginLogout from "~/components/LoginLogout";
 import PageWrapper from "~/components/PageWrapper";
 
-import { api } from "~/utils/api";
-
 const Home: NextPage = () => {
   return (
     <>
@@ -41,7 +39,7 @@ const Home: NextPage = () => {
             >
               <h3 className="text-2xl font-bold">Athletes →</h3>
               <div className="text-lg">
-                Detailed information about Athlete's past performance
+                Detailed information about Athlete&apos;s past performance
               </div>
             </Link>
             <LoginLogout />

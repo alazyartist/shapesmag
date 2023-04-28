@@ -1,36 +1,37 @@
+import { sheets_v4 } from "googleapis";
 import React, { useState } from "react";
 import AddAthleteModal from "~/components/AddAthleteModal";
+import AddEventModal from "~/components/AddEventModal";
 import { api } from "~/utils/api";
 
 const AdminIndex = () => {
   const { data } = api.battleStats.getSheets.useQuery();
-  const [activeSheet, setActiveSheet] = useState("NEO 7");
-  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [activeSheet, setActiveSheet] = useState<string>("NEO 7");
+  const [detailsVisible, setDetailsVisible] = useState<boolean>(false);
   const { data: details } = api.battleStats.getSheetValues.useQuery({
     sheet: activeSheet,
   });
 
-  const prepData = (details) => {
-    console.log(details);
+  const prepData = (details: sheets_v4.Schema$ValueRange) => {
     if (details?.values === undefined) return;
-    const arr = details.values
-      .slice(1)
-      .map((v, i) => {
-        if (details.values?.[i]?.[0] === undefined) return;
+    const arr = details?.values
+      ?.slice(1)
+      ?.map((v, i) => {
+        if (details?.values?.[i]?.[0] === undefined) return;
         const obj = {
-          [details.values[0][0]]: details.values[i][0],
-          [details.values[0][1]]: details.values[i][1],
-          [details.values[0][2]]: details.values[i][2],
-          [details.values[0][3]]: details.values[i][3],
-          [details.values[0][4]]:
-            details.values[i]?.[4] === ""
-              ? details.values[i - 1]?.[4]
-              : details.values[i]?.[4],
-          [details.values[0][5]]: details.values[i][5],
-          [details.values[0][6]]:
-            details.values[i]?.[6] === ""
-              ? details.values[i - 1]?.[6]
-              : details.values[i]?.[6],
+          [details?.values?.[0]?.[0]]: details?.values?.[i]?.[0],
+          [details?.values?.[0]?.[1]]: details?.values?.[i]?.[1],
+          [details?.values?.[0]?.[2]]: details?.values?.[i]?.[2],
+          [details?.values?.[0]?.[3]]: details?.values?.[i]?.[3],
+          [details?.values?.[0]?.[4]]:
+            details?.values?.[i]?.[4] === ""
+              ? details?.values?.[i - 1]?.[4]
+              : details?.values?.[i]?.[4],
+          [details?.values?.[0]?.[5]]: details?.values?.[i]?.[5],
+          [details?.values?.[0]?.[6]]:
+            details?.values?.[i]?.[6] === ""
+              ? details?.values?.[i - 1]?.[6]
+              : details?.values?.[i]?.[6],
         };
         console.log(obj, "obj");
         return obj;
@@ -41,8 +42,9 @@ const AdminIndex = () => {
   };
 
   const preparedData = prepData(details);
-  const [athleteModal, setAthleteModal] = useState(true);
-  const [googleDataVisible, setGoogleDataVisible] = useState(false);
+  const [athleteModal, setAthleteModal] = useState<boolean>(false);
+  const [eventModal, setEventModal] = useState<boolean>(false);
+  const [googleDataVisible, setGoogleDataVisible] = useState<boolean>(false);
   return (
     <div className="p-4">
       <div className="flex w-full">
@@ -62,20 +64,26 @@ const AdminIndex = () => {
             >
               Add User
             </button>
-            <button type="button" className="rounded-md bg-zinc-500 p-2">
+            <button
+              onClick={() => setEventModal((prev) => !prev)}
+              type="button"
+              className="rounded-md bg-zinc-500 p-2"
+            >
               Add Event
             </button>
           </>
         )}
       </div>
       {athleteModal && <AddAthleteModal />}
+      {eventModal && <AddEventModal />}
       {detailsVisible && (
         <div className="grid w-screen grid-cols-[1fr,4fr] ">
           <div>
             {data?.statSheet?.sheets?.map((s, i) => (
               <div
+                key={`${i}:row`}
                 className="border-[1px] border-zinc-200 p-1"
-                onClick={() => setActiveSheet(s?.properties?.title as string)}
+                onClick={() => setActiveSheet(s?.properties?.title)}
               >
                 {s?.properties?.title}
               </div>
@@ -129,25 +137,26 @@ const SheetValuesDisplay = ({ details, preparedData, visible }) => {
         {details?.values
           ?.slice(1, -1)
           ?.filter((s) => s.length > 0)
-          .map((row, i) => (
+          .map((row: string[], i: number) => (
             <div
-              key={`${i},${row[0]}`}
+              key={`${i},${row?.[0]}`}
               className=" grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr]"
             >
               <>
                 {i % 2 === 0 && (
                   <div className="col-span-8 p-1 text-center text-xl">
-                    {preparedData[i + 1]?.["Name"]}
+                    {preparedData?.[i + 1]?.["Name"]}
                     {" vs "}
-                    {preparedData[i + 2]?.["Name"]}
+                    {preparedData?.[i + 2]?.["Name"]}
                   </div>
                 )}
-                {row.map((col, inde: number) => {
-                  const keys = Object.keys(preparedData[i]);
+                {row.map((col: string, inde: number) => {
+                  const keys = Object.keys(preparedData?.[i]);
                   const key = keys[inde] ?? 0;
-                  const match = preparedData[i + 1]?.[key] === col;
+                  const match = preparedData?.[i + 1]?.[key] === col;
                   return (
                     <div
+                      key={`${col},${i}`}
                       className={`rounded-md border-[1px] border-zinc-200 p-1 ${
                         match ? "border-emerald-300" : "border-red-300"
                       }`}

@@ -1,18 +1,15 @@
 import React from "react";
 import {
-  SignIn,
   SignInButton,
   SignUpButton,
   SignOutButton,
   SignedIn,
   SignedOut,
-  useUser,
 } from "@clerk/nextjs";
 import useIsAdmin from "~/hooks/useIsAdmin";
 const LoginLogout = () => {
-  const user = useUser();
-  const isAdmin = useIsAdmin(user);
-  console.log(user.user?.publicMetadata?.isAdmin);
+  const isAdmin = useIsAdmin();
+  // console.log(user.user?.publicMetadata?.isAdmin);
   return (
     <div className="flex gap-4">
       {isAdmin && (

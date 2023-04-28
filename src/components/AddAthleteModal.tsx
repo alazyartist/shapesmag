@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 
 const AddAthleteModal = () => {
   const { mutate: createAthlete } = api.Athletes.createAthlete.useMutation();
   const { data: athletes } = api.Athletes.getAll.useQuery();
-  //@ts-ignore
-  const startid = athletes?.length + 1 ?? 0;
+  const startid = (athletes?.length as number) + 1 ?? 0;
   const [athleteId, setAthleteId] = useState<number>(startid);
   const [clerkId, setClerkId] = useState("");
   const [name, setName] = useState("");
   const [insta, setInsta] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const input = {
       athlete_id: athleteId,
@@ -27,7 +26,11 @@ const AddAthleteModal = () => {
     <div className="grid grid-cols-[1fr,5fr]">
       <div className="rounded-md bg-zinc-800">
         {athletes?.map((athlete) => {
-          return <div className="p-2">{athlete.name}</div>;
+          return (
+            <div key={athlete.name} className="p-2">
+              {athlete.name}
+            </div>
+          );
         })}
       </div>
       <form className="grid gap-4 p-2" onSubmit={handleSubmit}>
