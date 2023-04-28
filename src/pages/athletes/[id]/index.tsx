@@ -8,6 +8,7 @@ const AthletePage = () => {
   const { data: athleteDetails } = api.athletes.getAthleteDetails.useQuery({
     athlete_id: parseInt(athlete_id as string),
   });
+  if (!athleteDetails) return <div>No Details for this Athlete Yet</div>;
   return (
     <div>
       <div>AthletePage</div>
