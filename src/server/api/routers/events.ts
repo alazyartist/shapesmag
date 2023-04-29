@@ -33,4 +33,12 @@ export const eventsRouter = createTRPCRouter({
     const athletes = ctx.prisma.events.findMany({});
     return athletes;
   }),
+  getEventDetails: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const events = ctx.prisma.events.findUnique({
+        where: { event_id: input.event_id },
+      });
+      return events;
+    }),
 });
