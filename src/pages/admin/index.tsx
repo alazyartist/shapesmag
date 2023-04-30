@@ -81,7 +81,7 @@ const AdminIndex = () => {
       {activeView === "Event" && (
         <AddEventModal events={events} setActiveView={setActiveView} />
       )}
-      <AddBattleModal />
+      {activeView === "Battle" && <AddBattleModal />}
       {activeView === "Sheet" && (
         <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] ">
           <SheetListDisplay
