@@ -1,8 +1,10 @@
 // components/EventForm.js
-import { FormEvent, ChangeEvent, useState } from "react";
+import { Events } from "@prisma/client";
+import { useState } from "react";
+import { FormEvent, ChangeEvent } from "react";
 import { api } from "~/utils/api";
 
-const AddEventModal = ({ setActiveView,events }) => {
+const AddEventModal = ({ setActiveView, events }) => {
   const [formData, setFormData] = useState({
     date: "",
     name: "",
@@ -31,7 +33,7 @@ const AddEventModal = ({ setActiveView,events }) => {
       <div className="grid grid-cols-[1fr,5fr]">
         <div className="bg-zinc-900">
           {events &&
-            events.map((event) => {
+            events?.map((event: Events) => {
               return (
                 <div className="flex justify-between">
                   <div>{event?.name}</div>
