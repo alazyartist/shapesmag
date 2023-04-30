@@ -1,7 +1,9 @@
 import { sheets_v4 } from "googleapis";
 import React, { useState } from "react";
 import AddAthleteModal from "~/components/AddAthleteModal";
+import AddBattleModal from "~/components/AddBattleModal";
 import AddEventModal from "~/components/AddEventModal";
+import EventDropdown from "~/components/EventDropdown";
 import { api } from "~/utils/api";
 
 const AdminIndex = () => {
@@ -10,6 +12,7 @@ const AdminIndex = () => {
   const { data: details } = api.battleStats.getSheetValues.useQuery({
     sheet: activeSheet,
   });
+  const { data: events } = api.events.getAll.useQuery();
 
   const prepData = (details: sheets_v4.Schema$ValueRange) => {
     if (details?.values === undefined) return;
@@ -42,9 +45,6 @@ const AdminIndex = () => {
 
   const preparedData = prepData(details);
   const [activeView, setActiveView] = useState<string>("Events");
-  // const [detailsVisible, setDetailsVisible] = useState<boolean>(false);
-  // const [athleteModal, setAthleteModal] = useState<boolean>(false);
-  // const [eventModal, setEventModal] = useState<boolean>(false);
   const [googleDataVisible, setGoogleDataVisible] = useState<boolean>(false);
   return (
     <div className="h-[90vh] w-[95vw] max-w-[1200px] p-4">
@@ -79,8 +79,9 @@ const AdminIndex = () => {
         <AddAthleteModal setActiveView={setActiveView} />
       )}
       {activeView === "Event" && (
-        <AddEventModal setActiveView={setActiveView} />
+        <AddEventModal events={events} setActiveView={setActiveView} />
       )}
+      <AddBattleModal />
       {activeView === "Sheet" && (
         <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] ">
           <SheetListDisplay
@@ -94,27 +95,16 @@ const AdminIndex = () => {
               className="sticky top-[-14px] w-full text-center text-3xl font-bold"
             >
               {activeSheet}
+              <p className="text-sm font-normal text-zinc-400">
+                {googleDataVisible ? "google data in grey" : ""}
+              </p>
             </h1>
             <SheetValuesDisplay
+              events={events}
               googleDataVisible={googleDataVisible}
               preparedData={preparedData}
               details={details}
             />
-            {/* <div className="grid grid-cols-[1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
-            {preparedData?.map((d) => {
-              return (
-                <>
-                  <div>{d["Name"]}</div>
-                  <div>{d["Insta"]}</div>
-                  <div>{d["Votes"]}</div>
-                  <div>{d["% of votes"]}</div>
-                  <div>{d["Total Voters"]}</div>
-                  <div>{d["Sticker Taps"]}</div>
-                  <div>{d["Impressions"]}</div>
-                </>
-              );
-            })}
-          </div> */}
           </div>
         </div>
       )}
@@ -124,7 +114,12 @@ const AdminIndex = () => {
 
 export default AdminIndex;
 
-const SheetValuesDisplay = ({ details, preparedData, googleDataVisible }) => {
+const SheetValuesDisplay = ({
+  events,
+  details,
+  preparedData,
+  googleDataVisible,
+}) => {
   return (
     <>
       <div className=" grid grid-cols-[1fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
@@ -132,6 +127,7 @@ const SheetValuesDisplay = ({ details, preparedData, googleDataVisible }) => {
           <div key={col}>{col}</div>
         ))}
       </div>
+      {events && <EventDropdown options={events} />}
       <div className="h-full gap-4   ">
         {details?.values
           ?.slice(1, -1)

@@ -2,7 +2,7 @@
 import { FormEvent, ChangeEvent, useState } from "react";
 import { api } from "~/utils/api";
 
-const AddEventModal = ({ setActiveView }) => {
+const AddEventModal = ({ setActiveView,events }) => {
   const [formData, setFormData] = useState({
     date: "",
     name: "",
@@ -12,7 +12,6 @@ const AddEventModal = ({ setActiveView }) => {
     ticketlink: "",
     details: "",
   });
-  const { data: events } = api.events.getAll.useQuery();
   const { mutate: createEvent } = api.events.createEvent.useMutation();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
