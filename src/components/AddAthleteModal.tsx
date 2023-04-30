@@ -1,6 +1,6 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { api } from "~/utils/api";
-
+import type { FormEvent } from "react";
 const AddAthleteModal = ({ setActiveView }) => {
   const { mutate: createAthlete } = api.athletes.createAthlete.useMutation();
   const { data: athletes } = api.athletes.getAll.useQuery();

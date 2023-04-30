@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { Athletes } from "@prisma/client";
 export const athletesRouter = createTRPCRouter({
   createAthlete: publicProcedure
     .input(

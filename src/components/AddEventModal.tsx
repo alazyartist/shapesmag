@@ -1,7 +1,7 @@
 // components/EventForm.js
-import { Events } from "@prisma/client";
+import type { Events } from "@prisma/client";
 import { useState } from "react";
-import { FormEvent, ChangeEvent } from "react";
+import type { FormEvent, ChangeEvent } from "react";
 import { api } from "~/utils/api";
 
 const AddEventModal = ({ setActiveView, events }) => {
@@ -35,7 +35,7 @@ const AddEventModal = ({ setActiveView, events }) => {
           {events &&
             events?.map((event: Events) => {
               return (
-                <div className="flex justify-between">
+                <div key={event?.event_id} className="flex justify-between">
                   <div>{event?.name}</div>
                   <div>{new Date(event?.date).getFullYear()}</div>
                 </div>

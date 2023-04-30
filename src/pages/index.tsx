@@ -1,8 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import LoginLogout from "~/components/LoginLogout";
-import PageWrapper from "~/components/PageWrapper";
 
 const Home: NextPage = () => {
   return (
@@ -15,7 +15,8 @@ const Home: NextPage = () => {
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-[5rem]">
           <div className="max-h-[400px] max-w-[400px]">
-            <img
+            <Image
+              alt="shapeslogo"
               src={"/shapeslogo.PNG"}
               className="aspect-auto h-full w-full"
             />

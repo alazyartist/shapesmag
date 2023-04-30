@@ -39,7 +39,7 @@ export const battleStatsRouter = createTRPCRouter({
   }),
   getSheetValues: publicProcedure
     .input(z.object({ sheet: z.string() }))
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const auth = await getGoogleAuth();
       const sheets = google.sheets({
         version: "v4",

@@ -1,4 +1,4 @@
-import { sheets_v4 } from "googleapis";
+import type { sheets_v4 } from "googleapis";
 import React, { useState } from "react";
 import AddAthleteModal from "~/components/AddAthleteModal";
 import AddBattleModal from "~/components/AddBattleModal";

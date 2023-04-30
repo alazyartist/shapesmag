@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Events } from "@prisma/client";
+import type { Events } from "@prisma/client";
 const EventDropdown: React.FC<{ options: Array<Events> }> = ({ options }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeEvent, setActiveEvent] = useState("Choose Event");
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
-};
+  };
 
-const handleSelect = (option)=>{
+  const handleSelect = (option) => {
     setActiveEvent(option.name);
     setIsOpen(!isOpen);
-  }
+  };
 
   return (
     <div className="relative inline-block text-left">
@@ -33,6 +33,7 @@ const handleSelect = (option)=>{
             {options.map((option) => {
               return (
                 <button
+                  key={option.event_id}
                   onClick={() => handleSelect(option)}
                   className="block w-full whitespace-nowrap px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem"

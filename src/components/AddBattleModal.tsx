@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ChangeEvent, FormEvent, useState } from "react";
-
+import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 interface FormData {
   event_id: string;
   versus: string;
