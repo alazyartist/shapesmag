@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 
-const AddAthleteModal = ({ setAthleteModal }) => {
+const AddAthleteModal = ({ setActiveView }) => {
   const { mutate: createAthlete } = api.athletes.createAthlete.useMutation();
   const { data: athletes } = api.athletes.getAll.useQuery();
   const startid = (athletes?.length as number) + 1 ?? 0;
@@ -75,7 +75,7 @@ const AddAthleteModal = ({ setAthleteModal }) => {
             </button>
 
             <button
-              onClick={() => setAthleteModal(false)}
+              onClick={() => setActiveView(null)}
               className="rounded-md bg-red-300 p-2 text-red-800"
               type="button"
             >

@@ -7,7 +7,6 @@ import { api } from "~/utils/api";
 const AdminIndex = () => {
   const { data } = api.battleStats.getSheets.useQuery();
   const [activeSheet, setActiveSheet] = useState<string>("NEO 7");
-  const [detailsVisible, setDetailsVisible] = useState<boolean>(false);
   const { data: details } = api.battleStats.getSheetValues.useQuery({
     sheet: activeSheet,
   });
@@ -42,55 +41,51 @@ const AdminIndex = () => {
   };
 
   const preparedData = prepData(details);
-  const [athleteModal, setAthleteModal] = useState<boolean>(false);
-  const [eventModal, setEventModal] = useState<boolean>(false);
+  const [activeView, setActiveView] = useState<string>("Events");
+  // const [detailsVisible, setDetailsVisible] = useState<boolean>(false);
+  // const [athleteModal, setAthleteModal] = useState<boolean>(false);
+  // const [eventModal, setEventModal] = useState<boolean>(false);
   const [googleDataVisible, setGoogleDataVisible] = useState<boolean>(false);
   return (
     <div className="h-[90vh] w-[95vw] max-w-[1200px] p-4">
       <div className="flex w-full">
         <button
           type="button"
-          onClick={() => setDetailsVisible((prev) => !prev)}
+          onClick={() =>
+            activeView === "Sheet"
+              ? setActiveView(null)
+              : setActiveView("Sheet")
+          }
           className="rounded-md bg-zinc-500 p-2"
         >
-          {detailsVisible ? "Hide" : "See"} SheetData
+          {activeView === "Sheet" ? "Hide" : "See"} SheetData
         </button>
-        {!detailsVisible && (
-          <>
-            <button
-              onClick={() => setAthleteModal((prev) => !prev)}
-              type="button"
-              className="rounded-md bg-zinc-500 p-2"
-            >
-              Add User
-            </button>
-            <button
-              onClick={() => setEventModal((prev) => !prev)}
-              type="button"
-              className="rounded-md bg-zinc-500 p-2"
-            >
-              Add Event
-            </button>
-          </>
-        )}
+        <button
+          onClick={() => setActiveView("Athlete")}
+          type="button"
+          className="rounded-md bg-zinc-500 p-2"
+        >
+          Add User
+        </button>
+        <button
+          onClick={() => setActiveView("Event")}
+          type="button"
+          className="rounded-md bg-zinc-500 p-2"
+        >
+          Add Event
+        </button>
       </div>
-      {athleteModal && <AddAthleteModal setAthleteModal={setAthleteModal} />}
-      {eventModal && <AddEventModal />}
-      {detailsVisible && (
+      {activeView === "Athlete" && (
+        <AddAthleteModal setActiveView={setActiveView} />
+      )}
+      {activeView === "Event" && <AddEventModal />}
+      {activeView === "Sheet" && (
         <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] ">
-          <div>
-            {data?.statSheet?.sheets?.map((s, i) => (
-              <div
-                key={`${i}:row`}
-                className={`border-[1px] border-zinc-300 ${
-                  activeSheet === s.properties.title ? "bg-zinc-800" : ""
-                } p-1`}
-                onClick={() => setActiveSheet(s?.properties?.title)}
-              >
-                {s?.properties?.title}
-              </div>
-            ))}
-          </div>
+          <SheetListDisplay
+            activeSheet={activeSheet}
+            setActiveSheet={setActiveSheet}
+            data={data}
+          />
           <div className="no-scrollbar relative overflow-hidden overflow-y-scroll">
             <h1
               onClick={() => setGoogleDataVisible((pr) => !pr)}
@@ -99,7 +94,7 @@ const AdminIndex = () => {
               {activeSheet}
             </h1>
             <SheetValuesDisplay
-              visible={googleDataVisible}
+              googleDataVisible={googleDataVisible}
               preparedData={preparedData}
               details={details}
             />
@@ -127,7 +122,7 @@ const AdminIndex = () => {
 
 export default AdminIndex;
 
-const SheetValuesDisplay = ({ details, preparedData, visible }) => {
+const SheetValuesDisplay = ({ details, preparedData, googleDataVisible }) => {
   return (
     <>
       <div className=" grid grid-cols-[1fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
@@ -159,7 +154,7 @@ const SheetValuesDisplay = ({ details, preparedData, visible }) => {
                     onChange={(e) => console.log(e.target.checked)}
                   />
                   <RowDisplay
-                    visible={visible}
+                    googleDataVisible={googleDataVisible}
                     preparedData={preparedData}
                     row={row}
                     i={i}
@@ -183,7 +178,7 @@ const SheetValuesDisplay = ({ details, preparedData, visible }) => {
   );
 };
 
-const RowDisplay = ({ row, visible, preparedData, i }) => {
+const RowDisplay = ({ row, googleDataVisible, preparedData, i }) => {
   return row.map((col: string, inde: number) => {
     const keys = Object.keys(preparedData?.[i]);
     const key = keys[inde] ?? 0;
@@ -195,9 +190,27 @@ const RowDisplay = ({ row, visible, preparedData, i }) => {
           match ? "border-emerald-300" : "border-red-300"
         }`}
       >
-        {visible && <div className="text-zinc-400">{col}</div>}
+        {googleDataVisible && <div className="text-zinc-400">{col}</div>}
         <div className="text-zinc-200">{preparedData[i + 1]?.[key]}</div>
       </div>
     );
   });
+};
+
+const SheetListDisplay = ({ data, activeSheet, setActiveSheet }) => {
+  return (
+    <div>
+      {data?.statSheet?.sheets?.map((s, i) => (
+        <div
+          key={`${i}:row`}
+          className={`border-[1px] border-zinc-300 ${
+            activeSheet === s.properties.title ? "bg-zinc-800" : ""
+          } p-1`}
+          onClick={() => setActiveSheet(s?.properties?.title)}
+        >
+          {s?.properties?.title}
+        </div>
+      ))}
+    </div>
+  );
 };
