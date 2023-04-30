@@ -11,13 +11,8 @@ const battleStats = () => {
       <div className="space-y-2 pt-2">
         {events.map((event) => {
           return (
-            <div className="rounded-md bg-zinc-800 p-4">
-              <Link
-                href={`/battlestats/${event.event_id}`}
-                key={event.event_id}
-              >
-                {event.name}
-              </Link>
+            <div key={event.event_id} className="rounded-md bg-zinc-800 p-4">
+              <Link href={`/battlestats/${event.event_id}`}>{event.name}</Link>
             </div>
           );
         })}
