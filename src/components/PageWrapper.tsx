@@ -6,7 +6,7 @@ type WrapperProps = {
 };
 const PageWrapper: React.FC<WrapperProps> = ({ children }) => {
   return (
-    <main className="no-scrollbar flex min-h-screen flex-col items-center  overflow-hidden bg-gradient-to-b from-[#02246d] to-[#1d2056] text-zinc-300">
+    <main className="no-scrollbar flex min-h-screen flex-col items-center  overflow-hidden bg-gradient-to-b from-zinc-50 to-zinc-100 text-zinc-800">
       <div className="absolute right-4 top-4">
         <UserButton />
       </div>

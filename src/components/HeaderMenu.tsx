@@ -37,7 +37,7 @@ const MenuLink = ({ href, children }) => {
   return (
     <Link
       href={href}
-      className="p-2 text-lg font-light text-zinc-300 underline underline-offset-4"
+      className="p-2 text-lg font-light text-zinc-900 underline underline-offset-4"
     >
       {children}
     </Link>

@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import ShapesSvg from "~/components/ShapesSvg";
 import { api } from "~/utils/api";
 
 const AthletePage = () => {
@@ -12,6 +13,9 @@ const AthletePage = () => {
   return (
     <div>
       <div>AthletePage</div>
+      <div className={"h-full w-full"}>
+        <ShapesSvg />
+      </div>
       <div>{athleteDetails.name}</div>
       <div>{athleteDetails.insta}</div>
       <div>{athleteDetails.athlete_id}</div>

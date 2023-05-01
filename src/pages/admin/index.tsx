@@ -83,16 +83,16 @@ const AdminIndex = () => {
       )}
       {activeView === "Battle" && <AddBattleModal />}
       {activeView === "Sheet" && (
-        <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] ">
+        <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] bg-zinc-800 p-4 text-zinc-300">
           <SheetListDisplay
             activeSheet={activeSheet}
             setActiveSheet={setActiveSheet}
             data={data}
           />
-          <div className="no-scrollbar relative overflow-hidden overflow-y-scroll">
+          <div className="minimalistScroll relative overflow-hidden overflow-y-scroll">
             <h1
               onClick={() => setGoogleDataVisible((pr) => !pr)}
-              className="sticky top-[-14px] w-full text-center text-3xl font-bold"
+              className="sticky top-0 w-full bg-zinc-800 text-center text-3xl font-bold"
             >
               {activeSheet}
               <p className="text-sm font-normal text-zinc-400">
@@ -122,12 +122,14 @@ const SheetValuesDisplay = ({
 }) => {
   return (
     <>
-      <div className=" grid grid-cols-[1fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4">
-        {details?.values?.[0]?.map((col) => (
-          <div key={col}>{col}</div>
-        ))}
+      <div className={"sticky top-8 w-full bg-zinc-800 p-2"}>
+        <div className="grid grid-cols-[1fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4 ">
+          {details?.values?.[0]?.map((col) => (
+            <div key={col}>{col}</div>
+          ))}
+        </div>
+        {events && <EventDropdown options={events} />}
       </div>
-      {events && <EventDropdown options={events} />}
       <div className="h-full gap-4   ">
         {details?.values
           ?.slice(1, -1)
@@ -197,7 +199,7 @@ const RowDisplay = ({ row, googleDataVisible, preparedData, i }) => {
 
 const SheetListDisplay = ({ data, activeSheet, setActiveSheet }) => {
   return (
-    <div>
+    <div className="minimalistScroll h-full overflow-hidden overflow-y-scroll">
       {data?.statSheet?.sheets?.map((s, i) => (
         <div
           key={`${i}:row`}
