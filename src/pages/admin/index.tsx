@@ -261,12 +261,12 @@ const AddBattleInfo = ({ setOpen }) => {
       <p>{battleStore.battle}</p>
       <div>
         {battleStore.athletes.map((a) => (
-          <p>{a.Name}</p>
+          <p key={`${a.Name} athlete`}>{a.Name}</p>
         ))}
       </div>
       <div>
         {battleStore.stats.map((stat) => (
-          <div className="grid grid-cols-7 gap-2">
+          <div key={`${stat.Name} stat`} className="grid grid-cols-7 gap-2">
             <div
               className={`${
                 doesAthleteExist(athletes, stat?.Name)

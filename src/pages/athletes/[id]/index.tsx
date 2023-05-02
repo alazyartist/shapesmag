@@ -32,13 +32,13 @@ const AthletePage = () => {
       <div className="text-xl font-bold">Battles</div>
       <div>
         {athleteDetails.battles.map((battle) => (
-          <BattleDisplay battle={battle} />
+          <BattleDisplay key={battle.id} battle={battle} />
         ))}
       </div>
       <div className="text-xl font-bold">Events</div>
       <div>
         {athleteDetails.events.map((event) => (
-          <EventsDisplay event={event} />
+          <EventsDisplay key={event.id} event={event} />
         ))}
       </div>
     </div>
