@@ -30,7 +30,11 @@ export const athletesRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const athlete = ctx.prisma.athletes.findUnique({
         where: { athlete_id: input.athlete_id },
-        include: { battles: true, events: true, stats: true },
+        include: {
+          battles: { include: { battle: { include: { event: true } } } },
+          events: { include: { Event: true } },
+          stats: true,
+        },
       });
       return athlete;
     }),

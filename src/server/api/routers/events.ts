@@ -38,6 +38,7 @@ export const eventsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const events = ctx.prisma.events.findUnique({
         where: { event_id: input.event_id },
+        include: { Battles: { include: { stats: true } } },
       });
       return events;
     }),

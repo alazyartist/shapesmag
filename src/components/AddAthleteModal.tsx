@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import type { FormEvent } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 const AddAthleteModal = ({ setActiveView }) => {
-  const { mutate: createAthlete } = api.athletes.createAthlete.useMutation();
+  const { mutate: createAthlete } = api.athletes.createAthlete.useMutation({
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
   const { data: athletes } = api.athletes.getAll.useQuery();
-  const startid = (athletes?.length as number) + 1 ?? 0;
+  const startid = (athletes?.length as number) + 1;
   const [athleteId, setAthleteId] = useState<number>(startid);
   const [clerkId, setClerkId] = useState("");
   const [name, setName] = useState("");
   const [insta, setInsta] = useState("");
-
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (athletes.length) {
+      setAthleteId(athletes.length + 1);
+    }
+  }, [athletes]);
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const input = {
@@ -35,22 +43,14 @@ const AddAthleteModal = ({ setActiveView }) => {
           })}
         </div>
         <form
-          className=" grid gap-4 rounded-r-md bg-zinc-800 bg-opacity-40 p-2"
+          className=" grid gap-4 rounded-r-md bg-zinc-300 bg-opacity-80 p-2"
           onSubmit={handleSubmit}
         >
           <label className={"grid grid-cols-2"}>
             Athlete ID:
-            <div className={"text-zinc-300"}>{athleteId}</div>
+            <div className={"text-zinc-900"}>{athleteId}</div>
           </label>
-          <label className={"grid grid-cols-2"}>
-            Clerk ID (optional):
-            <input
-              className={"text-zinc-900"}
-              type="text"
-              value={clerkId}
-              onChange={(e) => setClerkId(e.target.value)}
-            />
-          </label>
+
           <label className={"grid grid-cols-2"}>
             Name:
             <input

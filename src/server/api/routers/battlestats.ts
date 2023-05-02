@@ -57,4 +57,68 @@ export const battleStatsRouter = createTRPCRouter({
       console.log(details);
       return details.data;
     }),
+  addBattleStats: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        stats: z.array(
+          z.object({
+            Name: z.string(),
+            Insta: z.string(),
+            Votes: z.string(),
+            "% of votes": z.string(),
+            "Total Voters": z.string(),
+            "Stick Taps": z.string(),
+            Impressions: z.string(),
+          })
+        ),
+        versus: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const event = await ctx.prisma.events.findUnique({
+        where: {
+          name: input.name,
+        },
+      });
+
+      const battle = await ctx.prisma.battles.create({
+        data: {
+          versus: input.versus,
+          event_id: event.event_id,
+        },
+      });
+      input.stats.forEach(async (stat) => {
+        const athlete = await ctx.prisma.athletes.findFirst({
+          where: { name: stat.Name },
+        });
+
+        const athleteBattle = await ctx.prisma.athlete_Battles.create({
+          data: {
+            athlete_id: athlete.athlete_id,
+            battle_id: battle.battle_id,
+          },
+        });
+        const athleteEvent = await ctx.prisma.athlete_Events.create({
+          data: {
+            athlete_id: athlete.athlete_id,
+            event_id: battle.event_id,
+          },
+        });
+        const stats = await ctx.prisma.battleStats.create({
+          data: {
+            battle_id: battle.battle_id,
+            votes: parseInt(stat.Votes),
+            stickerTaps: parseInt(stat["Stick Taps"]),
+            totalVotes: parseInt(stat["Total Voters"]),
+            impressions: parseInt(stat.Impressions),
+            percent: parseFloat(stat["% of votes"]),
+            athlete_id: athlete.athlete_id,
+          },
+        });
+      });
+
+      console.log(event.event_id, battle);
+      return event;
+    }),
 });

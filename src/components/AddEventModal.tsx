@@ -25,6 +25,7 @@ const AddEventModal = ({ setActiveView, events }) => {
     e.preventDefault();
     createEvent({ ...formData });
     // Handle form submission logic here (e.g., send data to API)
+    setActiveView(null);
     console.log("Form submitted:", formData);
   };
 
@@ -140,12 +141,12 @@ const AddEventModal = ({ setActiveView, events }) => {
               />
             </label>
           </div>
-          <div>
+          <div className="flex gap-2">
             <button
               className="rounded-md bg-zinc-300 p-2 text-zinc-800"
               type="submit"
             >
-              Create Athlete
+              Create Event
             </button>
 
             <button
