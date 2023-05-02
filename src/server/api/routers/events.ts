@@ -42,4 +42,13 @@ export const eventsRouter = createTRPCRouter({
       });
       return events;
     }),
+  getEventDetailsByName: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const events = ctx.prisma.events.findUnique({
+        where: { name: input.name },
+        include: { Battles: { include: { stats: true } } },
+      });
+      return events;
+    }),
 });

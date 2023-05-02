@@ -48,8 +48,8 @@ const AdminIndex = () => {
   const [googleDataVisible, setGoogleDataVisible] = useState<boolean>(false);
   return (
     <div className="h-[90vh] w-[95vw] max-w-[1200px] p-4">
-      <div className="flex w-full">
-        <button
+      <div className="my-1 flex w-full place-content-center place-items-center gap-2 text-zinc-200">
+        {/* <button
           type="button"
           onClick={() =>
             activeView === "Sheet"
@@ -59,6 +59,13 @@ const AdminIndex = () => {
           className="rounded-md bg-zinc-500 p-2"
         >
           {activeView === "Sheet" ? "Hide" : "See"} SheetData
+        </button> */}{" "}
+        <button
+          onClick={() => setActiveView("Event")}
+          type="button"
+          className="rounded-md bg-zinc-500 p-2"
+        >
+          Add Event
         </button>
         <button
           onClick={() => setActiveView("Athlete")}
@@ -66,13 +73,6 @@ const AdminIndex = () => {
           className="rounded-md bg-zinc-500 p-2"
         >
           Add User
-        </button>
-        <button
-          onClick={() => setActiveView("Event")}
-          type="button"
-          className="rounded-md bg-zinc-500 p-2"
-        >
-          Add Event
         </button>
       </div>
       {activeView === "Athlete" && (
@@ -224,7 +224,9 @@ const SheetListDisplay = ({ data, activeSheet, setActiveSheet }) => {
         <div
           key={`${i}:row`}
           className={`border-[1px] border-zinc-300 ${
-            activeSheet === s.properties.title ? "bg-zinc-800" : ""
+            activeSheet === s.properties.title
+              ? "bg-zinc-300 text-zinc-800"
+              : ""
           } p-1`}
           onClick={() => setActiveSheet(s?.properties?.title)}
         >

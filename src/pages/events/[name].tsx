@@ -1,12 +1,12 @@
-import { useRouter } from "next/router";
 import React from "react";
 import { api } from "~/utils/api";
+import { useRouter } from "next/router";
 
-const EventPage = () => {
+const EventDetails = () => {
   const router = useRouter();
-  const event_id: string = router.query?.event_id as string;
-  const { data: eventData } = api.events.getEventDetails.useQuery({
-    event_id: event_id,
+  const name: string = router.query?.name as string;
+  const { data: eventData } = api.events.getEventDetailsByName.useQuery({
+    name: name,
   });
   if (!eventData) return <div>Event Details Loading...</div>;
   return (
@@ -17,9 +17,9 @@ const EventPage = () => {
       </div>
       <div>{eventData.location}</div>
       <div>{eventData.host}</div>
-      {/* <div className="rounded-md bg-zinc-900 p-2 text-zinc-300">
+      <div className="rounded-md bg-zinc-900 p-2 text-zinc-300">
         {eventData.contactinfo}
-      </div> */}
+      </div>
       <div className="rounded-md bg-zinc-900 p-2 text-zinc-300">
         {eventData.details}
       </div>
@@ -35,4 +35,4 @@ const EventPage = () => {
   );
 };
 
-export default EventPage;
+export default EventDetails;
