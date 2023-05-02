@@ -23,9 +23,9 @@ const AddAthleteModal = ({ setActiveView }) => {
   };
 
   return (
-    <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center backdrop-blur-md">
+    <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-md">
       <div className=" grid grid-cols-[1fr,5fr] p-2">
-        <div className="rounded-md bg-zinc-800">
+        <div className="rounded-l-md bg-zinc-800 text-zinc-300">
           {athletes?.map((athlete) => {
             return (
               <div key={athlete.name} className="p-2">
@@ -34,7 +34,10 @@ const AddAthleteModal = ({ setActiveView }) => {
             );
           })}
         </div>
-        <form className="grid gap-4 p-2" onSubmit={handleSubmit}>
+        <form
+          className=" grid gap-4 rounded-r-md bg-zinc-800 bg-opacity-40 p-2"
+          onSubmit={handleSubmit}
+        >
           <label className={"grid grid-cols-2"}>
             Athlete ID:
             <div className={"text-zinc-300"}>{athleteId}</div>

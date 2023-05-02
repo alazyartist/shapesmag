@@ -4,6 +4,7 @@ import AddAthleteModal from "~/components/AddAthleteModal";
 import AddBattleModal from "~/components/AddBattleModal";
 import AddEventModal from "~/components/AddEventModal";
 import EventDropdown from "~/components/EventDropdown";
+import useBattleStore from "~/hooks/useBattleStore";
 import { api } from "~/utils/api";
 
 const AdminIndex = () => {
@@ -35,7 +36,6 @@ const AdminIndex = () => {
               ? details?.values?.[i - 1]?.[6]
               : details?.values?.[i]?.[6],
         };
-        console.log(obj, "obj");
         return obj;
       })
       .filter((s) => s !== undefined);
@@ -82,7 +82,7 @@ const AdminIndex = () => {
         <AddEventModal events={events} setActiveView={setActiveView} />
       )}
       {activeView === "Battle" && <AddBattleModal />}
-      {activeView === "Sheet" && (
+      {
         <div className="grid h-[80vh] w-full grid-cols-[1fr,4fr] bg-zinc-800 p-4 text-zinc-300">
           <SheetListDisplay
             activeSheet={activeSheet}
@@ -107,7 +107,7 @@ const AdminIndex = () => {
             />
           </div>
         </div>
-      )}
+      }
     </div>
   );
 };
@@ -120,6 +120,16 @@ const SheetValuesDisplay = ({
   preparedData,
   googleDataVisible,
 }) => {
+  const activeEvent = useBattleStore((s) => s.event);
+  const [battleModalOpen, setBattleModalOpen] = useState(false);
+  const handleAddBattle = (i) => {
+    console.log("addingBattle");
+    console.log({
+      stats: [preparedData[i], preparedData[i + 1]],
+      event: activeEvent,
+    });
+    setBattleModalOpen(true);
+  };
   return (
     <>
       <div className={"sticky top-8 w-full bg-zinc-800 p-2"}>
@@ -163,9 +173,7 @@ const SheetValuesDisplay = ({
               </div>
               {i % 2 !== 0 && (
                 <div
-                  onClick={() =>
-                    console.log(preparedData[i], preparedData[i + 1])
-                  }
+                  onClick={() => handleAddBattle(i)}
                   className="rounded-md bg-emerald-300 p-1 text-center text-emerald-800"
                 >
                   add battle info
@@ -174,6 +182,7 @@ const SheetValuesDisplay = ({
             </>
           ))}
       </div>
+      {battleModalOpen && <AddBattleInfo setOpen={setBattleModalOpen} />}
     </>
   );
 };
@@ -211,6 +220,27 @@ const SheetListDisplay = ({ data, activeSheet, setActiveSheet }) => {
           {s?.properties?.title}
         </div>
       ))}
+    </div>
+  );
+};
+
+const AddBattleInfo = ({ setOpen }) => {
+  return (
+    <div
+      className={
+        "absolute left-0 top-0 flex h-full w-full content-center items-center"
+      }
+    >
+      <div className="h-full w-full bg-zinc-800 text-zinc-300">
+        battle info review
+      </div>
+      <button
+        type="button"
+        onClick={() => setOpen(false)}
+        className="h-full w-full bg-zinc-800 text-zinc-300"
+      >
+        Cancel
+      </button>
     </div>
   );
 };

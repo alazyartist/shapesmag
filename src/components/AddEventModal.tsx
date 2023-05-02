@@ -29,13 +29,16 @@ const AddEventModal = ({ setActiveView, events }) => {
   };
 
   return (
-    <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center backdrop-blur-md">
-      <div className="grid grid-cols-[1fr,5fr]">
-        <div className="bg-zinc-900">
+    <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-md">
+      <div className="grid grid-cols-[1fr,3fr]">
+        <div className="rounded-l-md  bg-zinc-900 text-zinc-300">
           {events &&
             events?.map((event: Events) => {
               return (
-                <div key={event?.event_id} className="flex justify-between">
+                <div
+                  key={event?.event_id}
+                  className="flex justify-between gap-2 p-2"
+                >
                   <div>{event?.name}</div>
                   <div>{new Date(event?.date).getFullYear()}</div>
                 </div>
@@ -43,9 +46,12 @@ const AddEventModal = ({ setActiveView, events }) => {
             })}
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-4 p-2">
+        <form
+          onSubmit={handleSubmit}
+          className="grid gap-4 rounded-r-md bg-zinc-300 bg-opacity-70 p-2"
+        >
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="date">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="date">
               Date:
               <input
                 type="datetime-local"
@@ -58,7 +64,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             </label>
           </div>
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="name">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="name">
               Name:
               <input
                 type="text"
@@ -71,7 +77,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             </label>
           </div>
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="location">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="location">
               Location:
               <input
                 type="text"
@@ -84,7 +90,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             </label>
           </div>
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="host">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="host">
               Host:
               <input
                 type="text"
@@ -97,7 +103,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             </label>
           </div>
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="contactinfo">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="contactinfo">
               Contact Info:
               <input
                 type="text"
@@ -110,7 +116,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             </label>
           </div>
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="ticketlink">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="ticketlink">
               Ticket Link:
               <input
                 type="text"
@@ -123,7 +129,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             </label>
           </div>
           <div>
-            <label className={"grid grid-cols-2"} htmlFor="details">
+            <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="details">
               Details:
               <textarea
                 id="details"

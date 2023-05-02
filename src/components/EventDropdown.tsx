@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import type { Events } from "@prisma/client";
+import useBattleStore from "~/hooks/useBattleStore";
 const EventDropdown: React.FC<{ options: Array<Events> }> = ({ options }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeEvent, setActiveEvent] = useState("Choose Event");
-
+  const setActiveEvent = useBattleStore((s) => s.setEvent);
+  const activeEvent = useBattleStore((s) => s.event);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
