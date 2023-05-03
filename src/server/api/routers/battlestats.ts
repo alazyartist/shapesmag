@@ -121,7 +121,7 @@ export const battleStatsRouter = createTRPCRouter({
         });
       });
 
-      console.log(event.event_id, battle);
+      // console.log(event.event_id, battle);
       return event;
     }),
 });

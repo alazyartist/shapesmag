@@ -29,7 +29,9 @@ const EventPage = () => {
           Buy your ticket
         </a>
       ) : (
-        eventData.Battles.map((battle) => <div>{battle.versus}</div>)
+        eventData.Battles.map((battle) => (
+          <div key={battle.battle_id}>{battle.versus}</div>
+        ))
       )}
     </div>
   );
