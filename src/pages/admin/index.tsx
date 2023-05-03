@@ -1,5 +1,5 @@
 import type { sheets_v4 } from "googleapis";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddAthleteModal from "~/components/AddAthleteModal";
 import AddBattleModal from "~/components/AddBattleModal";
 import AddEventModal from "~/components/AddEventModal";
@@ -35,6 +35,7 @@ const AdminIndex = () => {
             details?.values?.[i]?.[6] === ""
               ? details?.values?.[i - 1]?.[6]
               : details?.values?.[i]?.[6],
+          [details?.values?.[0]?.[7]]: details?.values?.[i]?.[7],
         };
         return obj;
       })
@@ -124,12 +125,14 @@ const SheetValuesDisplay = ({
   const setAthletes = useBattleStore((s) => s.setAthletes);
   const setStats = useBattleStore((s) => s.setStats);
   const setBattle = useBattleStore((s) => s.setBattle);
+  const setBattleNum = useBattleStore((s) => s.setBattleNum);
   const [battleModalOpen, setBattleModalOpen] = useState(false);
   const { data: athletes } = api.athletes.getAll.useQuery();
   const handleAddBattle = (i) => {
     console.log("addingBattle");
     setAthletes([preparedData[i], preparedData[i + 1]]);
     setStats([preparedData[i], preparedData[i + 1]]);
+    setBattleNum(parseInt(preparedData[i]["Battle #"]));
     setBattle(`${preparedData[i].Name} vs ${preparedData[i + 1].Name}`);
     console.log({
       stats: [preparedData[i], preparedData[i + 1]],
@@ -140,7 +143,8 @@ const SheetValuesDisplay = ({
   return (
     <>
       <div className={"sticky top-8 w-full bg-zinc-800 p-2"}>
-        <div className="grid grid-cols-[1fr,1fr,2fr,1fr,1fr,1fr,1fr,1fr] gap-4 ">
+        <div className="grid grid-cols-[.2fr,1fr,2fr,.5fr,.5fr,.5fr,.5fr,.5fr,.2fr] gap-4 ">
+          <div></div>
           {details?.values?.[0]?.map((col) => (
             <div key={col}>{col}</div>
           ))}
@@ -155,12 +159,12 @@ const SheetValuesDisplay = ({
             <>
               <div
                 key={`${i},${row?.[0]}`}
-                className=" grid grid-cols-[.2fr,1fr,2fr,.5fr,.5fr,.5fr,.5fr,.5fr] "
+                className=" grid grid-cols-[.2fr,1fr,2fr,.5fr,.5fr,.5fr,.5fr,.5fr,.2fr] "
               >
                 <>
                   {/* guess at battle */}
                   {i % 2 === 0 && (
-                    <div className="col-span-8 p-1 text-center text-xl">
+                    <div className="col-span-9 p-1 text-center text-xl">
                       {preparedData?.[i + 1]?.["Name"]}
                       {" vs "}
                       {preparedData?.[i + 2]?.["Name"]}
@@ -249,8 +253,15 @@ const AddBattleInfo = ({ setOpen }) => {
   const { data: athletes } = api.athletes.getAll.useQuery();
   const battleStore = useBattleStore();
   console.log(battleStore.event);
-  const { mutate: addBattleStats } =
+  const { mutate: addBattleStats, isSuccess } =
     api.battleStats.addBattleStats.useMutation();
+  const isDisabled = battleStore.event === "Choose Event";
+
+  useEffect(() => {
+    if (isSuccess === true) {
+      setOpen(false);
+    }
+  }, [isSuccess]);
 
   return (
     <div
@@ -262,6 +273,10 @@ const AddBattleInfo = ({ setOpen }) => {
         Review Battle Info
       </div>
       <p>{battleStore.event}</p>
+      <p>
+        <span className="font-light">Battle #</span>
+        <span className="text-xl font-bold">{battleStore.battleNum}</span>
+      </p>
       <p>{battleStore.battle}</p>
       {/* <div>
         {battleStore.athletes.map((a) => (
@@ -292,25 +307,28 @@ const AddBattleInfo = ({ setOpen }) => {
           </div>
         ))}
       </div>
-      <div className="flex">
+      <div className="flex p-2">
         <button
           type="button"
-          disabled={battleStore.event === "Choose Event"}
+          disabled={isDisabled}
           onClick={() =>
             addBattleStats({
               name: battleStore.event,
               versus: battleStore.battle,
               stats: battleStore.stats,
+              battleNum: battleStore.battleNum,
             })
           }
-          className="h-full w-full bg-emerald-500 p-2 text-zinc-300"
+          className={`${
+            isDisabled ? "bg-red-500" : "bg-emerald-500"
+          } h-full w-full  rounded-md p-2 text-zinc-300`}
         >
           Submit
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="h-full w-full bg-zinc-800 p-2 text-zinc-300"
+          className="h-full w-full rounded-md bg-zinc-800 p-2 text-zinc-300"
         >
           Cancel
         </button>

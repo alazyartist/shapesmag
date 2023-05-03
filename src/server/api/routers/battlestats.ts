@@ -61,11 +61,13 @@ export const battleStatsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        battleNum: z.number(),
         stats: z.array(
           z.object({
             Name: z.string(),
             Insta: z.string(),
             Votes: z.string(),
+            "Battle #": z.string(),
             "% of votes": z.string(),
             "Total Voters": z.string(),
             "Stick Taps": z.string(),
@@ -86,6 +88,7 @@ export const battleStatsRouter = createTRPCRouter({
         data: {
           versus: input.versus,
           event_id: event.event_id,
+          battleNum: input.battleNum,
         },
       });
       input.stats.forEach(async (stat) => {
