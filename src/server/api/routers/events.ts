@@ -30,7 +30,7 @@ export const eventsRouter = createTRPCRouter({
       return event;
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const athletes = ctx.prisma.events.findMany({});
+    const athletes = ctx.prisma.events.findMany({ include: { Battles: true } });
     return athletes;
   }),
   getEventDetails: publicProcedure

@@ -12,10 +12,11 @@ const AthletesPage = () => {
           <Link
             href={`/athletes/${athlete.athlete_id}`}
             key={athlete.name}
-            className="flex gap-4 rounded-md bg-zinc-800 bg-opacity-70 p-1 text-zinc-200"
+            className="flex justify-between gap-4 rounded-md bg-zinc-800 bg-opacity-70 p-1 text-zinc-200"
           >
             <div>{athlete.name}</div>
             <div>{athlete.insta}</div>
+            <div>{athlete.battles?.length}</div>
           </Link>
         );
       })}

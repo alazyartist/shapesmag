@@ -255,22 +255,27 @@ const AddBattleInfo = ({ setOpen }) => {
   return (
     <div
       className={
-        "absolute left-0 top-0 flex h-full w-full flex-col content-center items-center bg-zinc-800"
+        "absolute left-0 top-0 flex h-full w-full flex-col content-center items-center bg-zinc-800 p-2"
       }
     >
-      <div className="h-full w-full  text-zinc-300">battle info review</div>
+      <div className="h-fit w-full text-center text-2xl font-extrabold text-zinc-300">
+        Review Battle Info
+      </div>
       <p>{battleStore.event}</p>
       <p>{battleStore.battle}</p>
-      <div>
+      {/* <div>
         {battleStore.athletes.map((a) => (
           <p key={`${a.Name} athlete`}>{a.Name}</p>
         ))}
-      </div>
+      </div> */}
       <div>
         {battleStore.stats.map((stat) => (
-          <div key={`${stat.Name} stat`} className="grid grid-cols-7 gap-2">
+          <div
+            key={`${stat.Name} stat`}
+            className="grid grid-cols-7 place-items-end gap-2 border-b-2 border-zinc-300"
+          >
             <div
-              className={`${
+              className={`w-full ${
                 doesAthleteExist(athletes, stat?.Name)
                   ? "bg-emerald-500"
                   : "bg-red-500"
@@ -287,27 +292,29 @@ const AddBattleInfo = ({ setOpen }) => {
           </div>
         ))}
       </div>
-      <button
-        type="button"
-        disabled={battleStore.event === "Choose Event"}
-        onClick={() =>
-          addBattleStats({
-            name: battleStore.event,
-            versus: battleStore.battle,
-            stats: battleStore.stats,
-          })
-        }
-        className="h-full w-full bg-emerald-500 text-zinc-300"
-      >
-        Submit
-      </button>
-      <button
-        type="button"
-        onClick={() => setOpen(false)}
-        className="h-full w-full bg-zinc-800 text-zinc-300"
-      >
-        Cancel
-      </button>
+      <div className="flex">
+        <button
+          type="button"
+          disabled={battleStore.event === "Choose Event"}
+          onClick={() =>
+            addBattleStats({
+              name: battleStore.event,
+              versus: battleStore.battle,
+              stats: battleStore.stats,
+            })
+          }
+          className="h-full w-full bg-emerald-500 p-2 text-zinc-300"
+        >
+          Submit
+        </button>
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          className="h-full w-full bg-zinc-800 p-2 text-zinc-300"
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };

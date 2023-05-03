@@ -22,7 +22,9 @@ export const athletesRouter = createTRPCRouter({
       return athlete;
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const athletes = ctx.prisma.athletes.findMany({});
+    const athletes = ctx.prisma.athletes.findMany({
+      include: { battles: true },
+    });
     return athletes;
   }),
   getAthleteDetails: publicProcedure
