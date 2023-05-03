@@ -144,9 +144,11 @@ const SheetValuesDisplay = ({
     <>
       <div className={"sticky top-8 w-full bg-zinc-800 p-2"}>
         <div className="grid grid-cols-[.2fr,1fr,2fr,.5fr,.5fr,.5fr,.5fr,.5fr,.2fr] gap-4 ">
-          <div></div>
+          <div>Ready</div>
           {details?.values?.[0]?.map((col) => (
-            <div key={col}>{col}</div>
+            <div className="whitespace-nowrap" key={col}>
+              {col}
+            </div>
           ))}
         </div>
         {events && <EventDropdown options={events} />}
@@ -197,7 +199,9 @@ const SheetValuesDisplay = ({
             </>
           ))}
       </div>
-      {battleModalOpen && <AddBattleInfo setOpen={setBattleModalOpen} />}
+      {battleModalOpen && (
+        <AddBattleInfo events={events} setOpen={setBattleModalOpen} />
+      )}
     </>
   );
 };
@@ -249,7 +253,7 @@ const doesAthleteExist = (athletes, name) => {
   return false;
 };
 
-const AddBattleInfo = ({ setOpen }) => {
+const AddBattleInfo = ({ setOpen, events }) => {
   const { data: athletes } = api.athletes.getAll.useQuery();
   const battleStore = useBattleStore();
   console.log(battleStore.event);
@@ -272,7 +276,13 @@ const AddBattleInfo = ({ setOpen }) => {
       <div className="h-fit w-full text-center text-2xl font-extrabold text-zinc-300">
         Review Battle Info
       </div>
-      <p>{battleStore.event}</p>
+      <p>
+        {isDisabled ? (
+          <>{events && <EventDropdown options={events} />}</>
+        ) : (
+          <>{battleStore.event}</>
+        )}
+      </p>
       <p>
         <span className="font-light">Battle #</span>
         <span className="text-xl font-bold">{battleStore.battleNum}</span>
