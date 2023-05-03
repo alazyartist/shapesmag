@@ -50,6 +50,7 @@ model Athlete_Battles {
 
 model Battles {
     battle_id String @db.VarChar(36) @id @default(uuid())
+    battleNum Int? 
     event_id String @db.VarChar(36)
     versus String @db.VarChar(255)
     
