@@ -14,7 +14,7 @@ const UpcomingEvents = () => {
   return (
     <div>
       <div className="p-2 text-3xl font-bold">Upcoming Events</div>
-      <div>
+      <div className="space-y-2">
         {upcoming.length > 0
           ? upcoming.map((event) => (
               <Link
@@ -28,7 +28,7 @@ const UpcomingEvents = () => {
           : "No Upcoming Events"}
       </div>
       <div className="p-2 text-3xl font-bold">Previous Events</div>
-      <div>
+      <div className="space-y-2">
         {previous.map((event) => (
           <Link
             key={event.event_id}

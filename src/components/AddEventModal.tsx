@@ -146,7 +146,13 @@ const AddEventModal = ({ setActiveView, events }) => {
           </div>
           <div>
             <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="ticketlink">
-              Ticket Link:
+              <div>
+                Ticket Link:{" "}
+                <div className="">
+                  <p className="text-xs">do not include https://www.</p>
+                  <p className="text-xs">websites only.</p>
+                </div>
+              </div>
               <input
                 type="text"
                 id="ticketlink"

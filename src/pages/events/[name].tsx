@@ -10,7 +10,7 @@ const EventDetails = () => {
   });
   if (!eventData) return <div>Event Details Loading...</div>;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex max-w-[900px] flex-col gap-2">
       <div className="text-4xl font-bold">{eventData.name}</div>
       <div className=" font-light">
         {new Date(eventData.date).toDateString()}
@@ -25,7 +25,11 @@ const EventDetails = () => {
       </div>
       {new Date(Date.now()).toDateString() <=
       new Date(eventData.date).toDateString() ? (
-        <a href={`https://${eventData.ticketlink}`} target="_blank">
+        <a
+          className="w-fit rounded-md bg-zinc-400 p-2"
+          href={`https://${eventData.ticketlink}`}
+          target="_blank"
+        >
           Buy your ticket
         </a>
       ) : (
