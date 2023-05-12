@@ -3,9 +3,18 @@ import type { Events } from "@prisma/client";
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { api } from "~/utils/api";
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero based
+  const day = ("0" + date.getDate()).slice(-2);
+
+  return `${year}-${month}-${day}`;
+}
 
 const AddEventModal = ({ setActiveView, events }) => {
   const [formData, setFormData] = useState({
+    event_id: "",
     date: "",
     name: "",
     location: "",
@@ -15,20 +24,29 @@ const AddEventModal = ({ setActiveView, events }) => {
     details: "",
   });
   const { mutate: createEvent } = api.events.createEvent.useMutation();
+  const { mutate: updateEvent } = api.events.updateEvent.useMutation();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleUpdateEvent = (event: Events) => {
+    console.log({ date: formatDate(event.date), ...event });
+    setFormData({
+      ...event,
+      date: formatDate(event.date),
+    });
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createEvent({ ...formData });
+    formData.event_id
+      ? updateEvent({ ...formData })
+      : createEvent({ ...formData });
     // Handle form submission logic here (e.g., send data to API)
     setActiveView(null);
     console.log("Form submitted:", formData);
   };
-
   return (
     <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-md">
       <div className="grid grid-cols-[1fr,3fr]">
@@ -40,8 +58,18 @@ const AddEventModal = ({ setActiveView, events }) => {
                   key={event?.event_id}
                   className="flex justify-between gap-2 p-2"
                 >
-                  <div>{event?.name}</div>
-                  <div>{new Date(event?.date).getFullYear()}</div>
+                  <p className="">{event?.name}</p>
+                  <div className="flex place-items-center gap-2">
+                    <button
+                      onClick={() => {
+                        handleUpdateEvent(event);
+                      }}
+                      className="rounded-md bg-zinc-800 p-1 text-xs"
+                    >
+                      edit
+                    </button>
+                    <div>{new Date(event?.date).getFullYear()}</div>
+                  </div>
                 </div>
               );
             })}
@@ -55,7 +83,7 @@ const AddEventModal = ({ setActiveView, events }) => {
             <label className={"grid grid-cols-[1fr,2fr]"} htmlFor="date">
               Date:
               <input
-                type="datetime-local"
+                type="date"
                 id="date"
                 name="date"
                 value={formData.date}
@@ -146,8 +174,28 @@ const AddEventModal = ({ setActiveView, events }) => {
               className="rounded-md bg-zinc-300 p-2 text-zinc-800"
               type="submit"
             >
-              Create Event
+              {formData.event_id ? "Update" : "Create"} Event
             </button>
+            {formData.event_id && (
+              <button
+                className="rounded-md bg-zinc-300 p-2 text-zinc-800"
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    event_id: "",
+                    date: "",
+                    name: "",
+                    location: "",
+                    host: "",
+                    contactinfo: "",
+                    ticketlink: "",
+                    details: "",
+                  })
+                }
+              >
+                Clear
+              </button>
+            )}
 
             <button
               onClick={() => setActiveView(null)}
@@ -164,3 +212,11 @@ const AddEventModal = ({ setActiveView, events }) => {
 };
 
 export default AddEventModal;
+
+const EditEventModal = () => {
+  return (
+    <div>
+      <div>test</div>
+    </div>
+  );
+};

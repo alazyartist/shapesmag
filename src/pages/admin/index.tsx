@@ -66,7 +66,7 @@ const AdminIndex = () => {
           type="button"
           className="rounded-md bg-zinc-500 p-2"
         >
-          Add Event
+          Manage Events
         </button>
         <button
           onClick={() => setActiveView("Athlete")}

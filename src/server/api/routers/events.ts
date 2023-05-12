@@ -29,6 +29,36 @@ export const eventsRouter = createTRPCRouter({
       });
       return event;
     }),
+  updateEvent: publicProcedure
+    .input(
+      z.object({
+        event_id: z.string(),
+        contactinfo: z.string(),
+        date: z.string(),
+        name: z.string(),
+        details: z.string(),
+        host: z.string(),
+        location: z.string(),
+        ticketlink: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { name, contactinfo, date, details, host, location, ticketlink } =
+        input;
+      const event = await ctx.prisma.events.update({
+        where: { event_id: input.event_id },
+        data: {
+          contactinfo,
+          date: new Date(date),
+          details,
+          host,
+          name,
+          location,
+          ticketlink,
+        },
+      });
+      return event;
+    }),
   getAll: publicProcedure.query(async ({ ctx }) => {
     const athletes = ctx.prisma.events.findMany({ include: { Battles: true } });
     return athletes;
