@@ -218,11 +218,3 @@ const AddEventModal = ({ setActiveView, events }) => {
 };
 
 export default AddEventModal;
-
-const EditEventModal = () => {
-  return (
-    <div>
-      <div>test</div>
-    </div>
-  );
-};

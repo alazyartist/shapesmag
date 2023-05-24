@@ -73,7 +73,7 @@ const AdminIndex = () => {
           type="button"
           className="rounded-md bg-zinc-500 p-2"
         >
-          Add User
+          Manage Users
         </button>
       </div>
       {activeView === "Athlete" && (

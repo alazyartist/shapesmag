@@ -21,6 +21,34 @@ export const athletesRouter = createTRPCRouter({
       });
       return athlete;
     }),
+  updateAthlete: publicProcedure
+    .input(
+      z.object({
+        athlete_id: z.number(),
+        clerk_id: z.string().optional().nullable(),
+        name: z.string(),
+        insta: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const athlete = await ctx.prisma.athletes.update({
+        where: { athlete_id: input.athlete_id },
+        data: {
+          insta: input.insta,
+          clerk_id: input.clerk_id,
+          name: input.name,
+        },
+      });
+      return athlete;
+    }),
+  deleteAthlete: publicProcedure
+    .input(z.object({ athlete_id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const deletedAthlete = await ctx.prisma.athletes.delete({
+        where: { athlete_id: input.athlete_id },
+      });
+      return deletedAthlete;
+    }),
   getAll: publicProcedure.query(async ({ ctx }) => {
     const athletes = ctx.prisma.athletes.findMany({
       include: { battles: true },
