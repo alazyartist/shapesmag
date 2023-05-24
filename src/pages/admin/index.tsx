@@ -245,9 +245,11 @@ const SheetListDisplay = ({ data, activeSheet, setActiveSheet }) => {
   );
 };
 const doesAthleteExist = (athletes, name) => {
-  for (let i = 0; i < athletes.length; i++) {
-    if (athletes[i].name === name) {
-      return true;
+  if (athletes?.length > 0) {
+    for (let i = 0; i < athletes.length; i++) {
+      if (athletes[i].name === name) {
+        return true;
+      }
     }
   }
   return false;
