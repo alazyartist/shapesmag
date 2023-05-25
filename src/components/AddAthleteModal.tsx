@@ -50,8 +50,8 @@ const AddAthleteModal = ({ setActiveView }) => {
 
   return (
     <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-md">
-      <div className=" grid grid-cols-[1fr,5fr] p-2">
-        <div className="rounded-l-md bg-zinc-800 text-zinc-300">
+      <div className=" grid grid-cols-[2fr,5fr] p-2">
+        <div className="no-scrollbar max-h-[50vh] overflow-y-scroll rounded-l-md bg-zinc-800 text-zinc-300">
           {athletes?.map((athlete) => {
             return (
               <div
