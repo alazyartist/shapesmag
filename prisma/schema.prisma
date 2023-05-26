@@ -3,7 +3,7 @@
 
 generator client {
     provider = "prisma-client-js"
-    
+
 }
 
 datasource db {
@@ -42,8 +42,8 @@ model Athlete_Battles {
     athlete_id Int
     battle_id String @db.VarChar(36)
 
-    athlete Athletes @relation(fields: [athlete_id],references: [athlete_id])
-    battle Battles @relation(fields: [battle_id],references: [battle_id])
+    athlete Athletes @relation(fields: [athlete_id],references: [athlete_id],onDelete: Cascade)
+    battle Battles @relation(fields: [battle_id],references: [battle_id],onDelete: Cascade)
     @@index([athlete_id])
     @@index([battle_id])
 }
@@ -56,7 +56,7 @@ model Battles {
     
     Athletes Athlete_Battles[]
     stats BattleStats[]
-    event Events @relation(fields: [event_id],references: [event_id])
+    event Events @relation(fields: [event_id],references: [event_id], onDelete: Cascade)
 
     @@index([event_id])
 }
@@ -70,8 +70,8 @@ model BattleStats {
     stickerTaps Int
     impressions Int
     
-    battle Battles @relation(fields: [battle_id],references: [battle_id])
-    athlete Athletes @relation(fields: [athlete_id], references: [athlete_id])
+    battle Battles @relation(fields: [battle_id],references: [battle_id], onDelete:Cascade)
+    athlete Athletes @relation(fields: [athlete_id], references: [athlete_id], onDelete: Cascade)
     
     @@index([athlete_id])
     @@index([battle_id])

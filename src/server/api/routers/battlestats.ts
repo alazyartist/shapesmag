@@ -57,6 +57,49 @@ export const battleStatsRouter = createTRPCRouter({
       console.log(details);
       return details.data;
     }),
+  getStatsByEvent: publicProcedure
+    .input(z.object({ event_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const eventStats = await ctx.prisma.events.findUnique({
+        where: { event_id: input.event_id },
+        include: { Battles: { include: { stats: true } } },
+      });
+
+      return eventStats;
+    }),
+  deleteBattleandStats: publicProcedure
+    .input(
+      z.object({
+        battle_id: z.string(),
+        event_id: z.string(),
+        athlete_ids: z.array(z.number()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      for (let i = 0; i < input.athlete_ids.length; i++) {
+        const deleteEventAssociation =
+          await ctx.prisma.athlete_Events.deleteMany({
+            where: {
+              event_id: input.event_id,
+              athlete_id: input.athlete_ids[i],
+            },
+          });
+        const deleteRelation = await ctx.prisma.athlete_Battles.deleteMany({
+          where: {
+            battle_id: input.battle_id,
+            athlete_id: input.athlete_ids[i],
+          },
+        });
+      }
+
+      const deletedStats = await ctx.prisma.battleStats.deleteMany({
+        where: { battle_id: input.battle_id },
+      });
+      const deleted = await ctx.prisma.battles.delete({
+        where: { battle_id: input.battle_id },
+      });
+      return deleted;
+    }),
   addBattleStats: publicProcedure
     .input(
       z.object({
