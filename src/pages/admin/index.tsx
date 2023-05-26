@@ -4,6 +4,7 @@ import AddAthleteModal from "~/components/AddAthleteModal";
 import AddBattleModal from "~/components/AddBattleModal";
 import AddEventModal from "~/components/AddEventModal";
 import EventDropdown from "~/components/EventDropdown";
+import ManageBattleStats from "~/components/ManageBattleStats";
 import useBattleStore from "~/hooks/useBattleStore";
 import { api } from "~/utils/api";
 
@@ -75,7 +76,17 @@ const AdminIndex = () => {
         >
           Manage Users
         </button>
+        <button
+          onClick={() => setActiveView("Stats")}
+          type="button"
+          className="rounded-md bg-zinc-500 p-2"
+        >
+          Manage Stats
+        </button>
       </div>
+      {activeView === "Stats" && (
+        <ManageBattleStats events={events} setActiveView={setActiveView} />
+      )}
       {activeView === "Athlete" && (
         <AddAthleteModal setActiveView={setActiveView} />
       )}

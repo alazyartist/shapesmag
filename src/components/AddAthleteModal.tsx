@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { api } from "~/utils/api";
 import type { FormEvent, ChangeEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Athletes } from "@prisma/client";
+import useClickOutside from "~/hooks/useClickOutside";
 const AddAthleteModal = ({ setActiveView }) => {
+  const ref = useRef();
+  useClickOutside(ref, () => setActiveView(null));
   const { mutate: createAthlete } = api.athletes.createAthlete.useMutation({
     onSuccess: () => queryClient.invalidateQueries(),
   });
@@ -50,7 +53,7 @@ const AddAthleteModal = ({ setActiveView }) => {
 
   return (
     <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-md">
-      <div className=" grid grid-cols-[2fr,5fr] p-2">
+      <div ref={ref} className=" grid grid-cols-[2fr,5fr] p-2">
         <div className="no-scrollbar max-h-[50vh] overflow-y-scroll rounded-l-md bg-zinc-800 text-zinc-300">
           {athletes?.map((athlete) => {
             return (

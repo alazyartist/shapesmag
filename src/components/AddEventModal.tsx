@@ -1,7 +1,8 @@
 // components/EventForm.js
 import type { Events } from "@prisma/client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
+import useClickOutside from "~/hooks/useClickOutside";
 import { api } from "~/utils/api";
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -13,6 +14,8 @@ function formatDate(dateString) {
 }
 
 const AddEventModal = ({ setActiveView, events }) => {
+  const ref = useRef();
+  useClickOutside(ref, () => setActiveView(null));
   const [formData, setFormData] = useState({
     event_id: "",
     date: "",
@@ -49,7 +52,7 @@ const AddEventModal = ({ setActiveView, events }) => {
   };
   return (
     <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center backdrop-blur-md">
-      <div className="grid grid-cols-[1fr,3fr]">
+      <div ref={ref} className="grid grid-cols-[1fr,3fr]">
         <div className="rounded-l-md  bg-zinc-900 text-zinc-300">
           {events &&
             events?.map((event: Events) => {
