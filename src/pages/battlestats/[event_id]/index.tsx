@@ -23,14 +23,17 @@ const EventPage = () => {
       <div className="rounded-md bg-zinc-900 p-2 text-zinc-300">
         {eventData.details}
       </div>
-      {new Date(Date.now()).toDateString() <=
+      {new Date(Date.now()).toDateString() >=
       new Date(eventData.date).toDateString() ? (
         <a href={`https://${eventData.ticketlink}`} target="_blank">
           Buy your ticket
         </a>
       ) : (
         eventData.Battles.map((battle) => (
-          <div key={battle.battle_id}>{battle.versus}</div>
+          <div className="grid grid-cols-[0.2fr,2fr]" key={battle.battle_id}>
+            <p>{battle.battleNum}</p>
+            <p>{battle.versus}</p>
+          </div>
         ))
       )}
     </div>

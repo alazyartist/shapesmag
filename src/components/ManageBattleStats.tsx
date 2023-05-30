@@ -51,11 +51,14 @@ const ManageBattleStats = ({ setActiveView, events }) => {
         <div className="grid gap-4 rounded-r-md bg-zinc-300 bg-opacity-70 p-2">
           <div className="minimalistScroll relative space-y-2 overflow-y-scroll">
             {Array.isArray(fullEvent?.Battles) &&
-              fullEvent.Battles.map((battle) => (
+              fullEvent.Battles.sort((a, b) => {
+                return a.battleNum > b.battleNum ? 1 : -1;
+              }).map((battle) => (
                 <div
                   className="flex justify-between gap-2 border-b-2 text-zinc-800"
                   key={battle.battle_id}
                 >
+                  <p>{battle.battleNum}</p>
                   <p>{battle.versus}</p>
                   <div className="">
                     {Array.isArray(battle.stats) &&

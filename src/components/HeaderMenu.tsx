@@ -22,7 +22,7 @@ const HeaderMenu = () => {
       flex flex-wrap"
       >
         <MenuLink href={"/"}>Home</MenuLink>
-        <MenuLink href={"https://www.shapesmag.com"}>Shop</MenuLink>
+        <MenuLink href={"https://shop.shapesmag.com"}>Shop</MenuLink>
         <MenuLink href={"/events"}>Events</MenuLink>
         <MenuLink href={"/battlestats"}>BattleStats</MenuLink>
         <MenuLink href={"/athletes"}>Athletes</MenuLink>

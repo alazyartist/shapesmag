@@ -7,10 +7,16 @@ import { api } from "~/utils/api";
 const AthletePage = () => {
   const router = useRouter();
   const athlete_id = router?.query?.id;
-  const { data: athleteDetails } = api.athletes.getAthleteDetails.useQuery({
-    athlete_id: parseInt(athlete_id as string),
-  });
-  if (!athleteDetails) return <div>No Details for this Athlete Yet</div>;
+  const { data: athleteDetails, isLoading } =
+    api.athletes.getAthleteDetails.useQuery({
+      athlete_id: parseInt(athlete_id as string),
+    });
+  if (!athleteDetails)
+    return isLoading ? (
+      <div>Loading</div>
+    ) : (
+      <div>No Details for this Athlete Yet</div>
+    );
   return (
     <div className="flex min-h-[600px] flex-col">
       <div className={"grid h-fit w-full grid-cols-2"}>
